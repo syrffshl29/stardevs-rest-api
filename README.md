@@ -1,3 +1,6 @@
-https://user-images.githubusercontent.com/33158051/103466606-760a4000-4d14-11eb-9941-2f3d00371471.png
+<div>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original-wordmark.svg" title="java" alt="dart" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/spring/spring-original.svg" title="java" alt="dart" width="40" height="40"/>&nbsp;
+</div>
 Aplikasi Tabungan Digital (TabungIn)
 ## Dibuat Oleh STAR Devs
