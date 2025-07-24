@@ -1,11 +1,9 @@
 package com.starcodes.tabungin.repository;
 
+import com.starcodes.tabungin.model.LogAktivitas;
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.starcodes.tabungin.model.TargetTabungan;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TargetRepository extends JpaRepository<TargetTabungan, Long> {
-
-	//CRUD model TargetTabungan
+public interface LogActifityRepository extends JpaRepository<LogAktivitas,Long> {
 }
