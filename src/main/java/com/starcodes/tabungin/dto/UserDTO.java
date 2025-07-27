@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class UserDTO {
 
-    // Masih coba juga
+
     private Long id;
     private String username;
     private String email;
