@@ -16,6 +16,7 @@ public class TargetTabunganDto {
     private LocalDate tanggalSelesaiTarget;
     private String statusTarget;
 
+
     public Long getUserId() {
         return userId;
     }
