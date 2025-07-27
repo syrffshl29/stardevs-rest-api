@@ -50,8 +50,7 @@ public class TargetServiceImpl {
         targetTabungan.setTargetName(targetTabunganDto.getTargetName());
         targetTabungan.setJumlahDataTarget(targetTabunganDto.getJumlahDataTarget());
         targetTabungan.setDeskripsi(targetTabunganDto.getDeskripsi());
-        targetTabungan.setUserId(targetTabunganDto.getUserId());
-        targetTabungan.setUsername(targetTabunganDto.getUsername());
+        targetTabungan.setUserId(targetTabunganDto.getUserId());;
         targetTabungan.setSaldoTerkumpul(targetTabunganDto.getSaldoTerkumpul());
         return targetTabungan;
 
