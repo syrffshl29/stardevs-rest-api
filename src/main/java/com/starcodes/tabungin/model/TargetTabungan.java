@@ -49,101 +49,11 @@ public class TargetTabungan {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable=false)
+    private Users userId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
-    }
-
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    public Long getJumlahDataTarget() {
-        return jumlahDataTarget;
-    }
-
-    public void setJumlahDataTarget(Long jumlahDataTarget) {
-        this.jumlahDataTarget = jumlahDataTarget;
-    }
-
-    public Long getSaldoTerkumpul() {
-        return saldoTerkumpul;
-    }
-
-    public void setSaldoTerkumpul(Long saldoTerkumpul) {
-        this.saldoTerkumpul = saldoTerkumpul;
-    }
-
-    public String getPeriode() {
-        return periode;
-    }
-
-    public void setPeriode(String periode) {
-        this.periode = periode;
-    }
-
-    public String getDeskripsi() {
-        return deskripsi;
-    }
-
-    public void setDeskripsi(String deskripsi) {
-        this.deskripsi = deskripsi;
-    }
-
-    public LocalDate getTanggalMulaiTarget() {
-        return tanggalMulaiTarget;
-    }
-
-    public void setTanggalMulaiTarget(LocalDate tanggalMulaiTarget) {
-        this.tanggalMulaiTarget = tanggalMulaiTarget;
-    }
-
-    public LocalDate getTanggalSelesaiTarget() {
-        return tanggalSelesaiTarget;
-    }
-
-    public void setTanggalSelesaiTarget(LocalDate tanggalSelesaiTarget) {
-        this.tanggalSelesaiTarget = tanggalSelesaiTarget;
-    }
-
-    public String getStatusTarget() {
-        return statusTarget;
-    }
-
-    public void setStatusTarget(String statusTarget) {
-        this.statusTarget = statusTarget;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     @PrePersist
     protected void onCreate() {
@@ -151,8 +61,4 @@ public class TargetTabungan {
         this.updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

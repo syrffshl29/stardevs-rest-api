@@ -17,11 +17,11 @@ public class SetoranController {
     public Object save(@RequestBody Setoran setoran) {
         return depositServiceImpl.save(setoran);
     }
-    @GetMapping
-    public Object getAllSetoran() {
+    @GetMapping("/all")
+    public Object findAllSetoran() {
         return depositServiceImpl.findAll();
     }
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<Setoran> getSetoranById(@PathVariable Long id) {
         return depositServiceImpl.findById(id)
             .map(ResponseEntity::ok)
