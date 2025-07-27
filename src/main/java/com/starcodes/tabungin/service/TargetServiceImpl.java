@@ -32,7 +32,7 @@ public class TargetServiceImpl {
         return "user not found";
         }
         TargetTabungan targetTabungan = mapToModel(targetTabunganDto);
-        targetTabungan.setUser(userOpt.get());
+        targetTabungan.setUserId(userOpt.get());
         targetRepository.save(targetTabungan);
         return "Data Berhasil Disimpan";
     }
@@ -50,7 +50,8 @@ public class TargetServiceImpl {
         targetTabungan.setTargetName(targetTabunganDto.getTargetName());
         targetTabungan.setJumlahDataTarget(targetTabunganDto.getJumlahDataTarget());
         targetTabungan.setDeskripsi(targetTabunganDto.getDeskripsi());
-        targetTabungan.setUserId(targetTabunganDto.getUserId());;
+        Users user = userRepository.findById(targetTabunganDto.getUserId()).orElse(null);
+        targetTabungan.setUserId(user);
         targetTabungan.setSaldoTerkumpul(targetTabunganDto.getSaldoTerkumpul());
         return targetTabungan;
 

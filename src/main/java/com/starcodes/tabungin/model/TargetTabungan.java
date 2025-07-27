@@ -15,10 +15,6 @@ public class TargetTabungan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
-
     @Column(name = "nama_target", nullable = false)
     private String targetName;
 
@@ -50,8 +46,19 @@ public class TargetTabungan {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Users userId;
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private Users username;
+
+    public Users getUsername() {
+        return username;
+    }
+
+    public void setUsername(Users username) {
+        this.username = username;
+    }
 
     public Long getId() {
         return id;
@@ -59,14 +66,6 @@ public class TargetTabungan {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
     }
 
     public String getTargetName() {
@@ -155,12 +154,7 @@ public class TargetTabungan {
 
     public void setUserId(Users userId) {
         this.userId = userId;
-    }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
 
