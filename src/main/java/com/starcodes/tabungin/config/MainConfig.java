@@ -23,8 +23,8 @@ public class MainConfig {
         ModelMapper modelMapper = new ModelMapper();
 
         modelMapper.typeMap(TargetTabungan.class, TargetTabungan.class).addMappings(mapper -> {
-            mapper.map(src -> src.getUserId().getId(), TargetTabungan::setUserId);
-            mapper.map(src -> src.getUserId().getUsername(), TargetTabungan::setUsername);
+            mapper.map(src -> src.getUser().getId(), TargetTabungan::setUser);
+            mapper.map(src -> src.getUser().getUsername(), TargetTabungan::setUser);
 
         });
         return modelMapper;

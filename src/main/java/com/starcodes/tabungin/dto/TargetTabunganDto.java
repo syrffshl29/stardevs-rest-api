@@ -4,7 +4,8 @@ package com.starcodes.tabungin.dto;
 import java.time.LocalDate;
 
 public class TargetTabunganDto {
-    private Long userId;
+
+    private Long id;
     private String targetName;
     private Long jumlahDataTarget;
     private Long saldoTerkumpul;
@@ -13,13 +14,15 @@ public class TargetTabunganDto {
     private LocalDate tanggalMulaiTarget;
     private LocalDate tanggalSelesaiTarget;
     private String statusTarget;
+    private Long userId;
+    private String username;
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTargetName() {
@@ -84,5 +87,21 @@ public class TargetTabunganDto {
 
     public void setStatusTarget(String statusTarget) {
         this.statusTarget = statusTarget;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

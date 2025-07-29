@@ -47,7 +47,7 @@ public class Users {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<TargetTabungan> targetList;
+    private List<TargetTabungan> targetTabunganList;
 
     // getter, setter, constructor (boleh pakai Lombok jika mau)
 
@@ -132,11 +132,11 @@ public class Users {
     }
 
     public List<TargetTabungan> getTargetList() {
-        return targetList;
+        return targetTabunganList;
     }
 
-    public void setTargetList(List<TargetTabungan> targetList) {
-        this.targetList = targetList;
+    public void setTargetTabunganList(List<TargetTabungan> targetList) {
+        this.targetTabunganList = targetList;
     }
 }
 

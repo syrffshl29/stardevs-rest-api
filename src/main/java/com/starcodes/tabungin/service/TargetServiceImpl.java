@@ -6,58 +6,65 @@ import com.starcodes.tabungin.model.Users;
 import com.starcodes.tabungin.repository.TargetRepository;
 import com.starcodes.tabungin.repository.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class TargetServiceImpl {
 
-	//implementasi dari TargetService
     @Autowired
     private TargetRepository targetRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
     public Object save(TargetTabunganDto targetTabunganDto) {
         Optional<Users> userOpt = userRepository.findById(targetTabunganDto.getUserId());
-        if (userOpt.isEmpty()){
-        return "user not found";
+        if (userOpt.isEmpty()) {
+            return "User not found";
         }
-        TargetTabungan targetTabungan = mapToModel(targetTabunganDto);
-        targetTabungan.setUserId(userOpt.get());
+        Users user = userOpt.get();
+        TargetTabungan targetTabungan = mapToModel(targetTabunganDto, user);
         targetRepository.save(targetTabungan);
-        return "Data Berhasil Disimpan";
+        return "Data berhasil disimpan";
     }
 
     public Object findAll() {
-    List<TargetTabungan> targetTabunganList = targetRepository.findAll();
-        return mapToModelMapper(targetTabunganList);
+        List<TargetTabungan> targetTabunganList = targetRepository.findAll();
+        return mapToDtoList(targetTabunganList);
     }
 
     public Optional<TargetTabungan> findById(Long id) {
         return targetRepository.findById(id);
     }
-    public TargetTabungan mapToModel (TargetTabunganDto targetTabunganDto) {
-        TargetTabungan targetTabungan = new TargetTabungan();
-        targetTabungan.setTargetName(targetTabunganDto.getTargetName());
-        targetTabungan.setJumlahDataTarget(targetTabunganDto.getJumlahDataTarget());
-        targetTabungan.setDeskripsi(targetTabunganDto.getDeskripsi());
-        Users user = userRepository.findById(targetTabunganDto.getUserId()).orElse(null);
-        targetTabungan.setUserId(user);
-        targetTabungan.setSaldoTerkumpul(targetTabunganDto.getSaldoTerkumpul());
-        return targetTabungan;
 
+    private TargetTabungan mapToModel(TargetTabunganDto dto, Users user) {
+        TargetTabungan target = new TargetTabungan();
+        target.setTargetName(dto.getTargetName());
+        target.setJumlahDataTarget(dto.getJumlahDataTarget());
+        target.setDeskripsi(dto.getDeskripsi());
+        target.setSaldoTerkumpul(dto.getSaldoTerkumpul());
+        target.setUser(user);
+        return target;
     }
-        private Object mapToModelMapper(List<TargetTabungan> targetTabunganList) {
-        return modelMapper.map(targetTabunganList, new TypeToken<List<TargetTabunganDto>>() {
-        }.getType());
-        }
+
+    private List<TargetTabunganDto> mapToDtoList(List<TargetTabungan> entities) {
+        return entities.stream().map(entity -> {
+            TargetTabunganDto dto = modelMapper.map(entity, TargetTabunganDto.class);
+            if (entity.getUser() != null) {
+                dto.setUserId(entity.getUser().getId());
+                dto.setUsername(entity.getUser().getUsername());
+            }
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }

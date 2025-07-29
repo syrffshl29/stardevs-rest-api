@@ -47,18 +47,7 @@ public class TargetTabungan {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users userId;
-    @ManyToOne
-    @JoinColumn(name = "username")
-    private Users username;
-
-    public Users getUsername() {
-        return username;
-    }
-
-    public void setUsername(Users username) {
-        this.username = username;
-    }
+    private Users user;
 
     public Long getId() {
         return id;
@@ -148,14 +137,11 @@ public class TargetTabungan {
         this.updatedAt = updatedAt;
     }
 
-    public Users getUserId() {
-        return userId;
+    public Users getUser() {
+        return user;
     }
 
-    public void setUserId(Users userId) {
-        this.userId = userId;
-
+    public void setUser(Users user) {
+        this.user = user;
     }
-
-
 }
