@@ -1,6 +1,5 @@
 package com.starcodes.tabungin.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -49,7 +48,9 @@ public class User {
     @JsonIgnore
     private List<TargetTabungan> targetTabunganList;
 
-    // getter, setter, constructor (boleh pakai Lombok jika mau)
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<TransaksiTabungan> transaksiTabunganList;
 
     public Long getId() {
         return Id;
@@ -131,12 +132,20 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public List<TargetTabungan> getTargetList() {
+    public List<TargetTabungan> getTargetTabunganList() {
         return targetTabunganList;
     }
 
-    public void setTargetTabunganList(List<TargetTabungan> targetList) {
-        this.targetTabunganList = targetList;
+    public void setTargetTabunganList(List<TargetTabungan> targetTabunganList) {
+        this.targetTabunganList = targetTabunganList;
+    }
+
+    public List<TransaksiTabungan> getTransaksiTabunganList() {
+        return transaksiTabunganList;
+    }
+
+    public void setTransaksiTabunganList(List<TransaksiTabungan> transaksiTabunganList) {
+        this.transaksiTabunganList = transaksiTabunganList;
     }
 }
 

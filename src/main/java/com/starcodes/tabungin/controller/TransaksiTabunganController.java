@@ -1,5 +1,6 @@
 package com.starcodes.tabungin.controller;
 
+import com.starcodes.tabungin.dto.validation.ValTransactionDto;
 import com.starcodes.tabungin.model.TransaksiTabungan;
 import com.starcodes.tabungin.service.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ public class TransaksiTabunganController {
     TransactionServiceImpl transactionServiceImpl;
 
     @PostMapping
-    public Object save(@RequestBody TransaksiTabungan transaksiTabungan) {
-        return transactionServiceImpl.save(transaksiTabungan);
+    public Object save(@RequestBody ValTransactionDto valTransactionDto) {
+        return transactionServiceImpl.save(valTransactionDto);
     }
     @GetMapping("/all")
     public Object findAll() {

@@ -1,8 +1,12 @@
 package com.starcodes.tabungin.service;
 
+import com.starcodes.tabungin.dto.validation.ValDepositoDto;
 import com.starcodes.tabungin.model.Setoran;
 
+import com.starcodes.tabungin.model.TargetTabungan;
 import com.starcodes.tabungin.repository.DepositRepository;
+import com.starcodes.tabungin.repository.TargetRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +23,13 @@ public class DepositServiceImpl {
     @Autowired
     private DepositRepository depositRepository;
 
-    public Object save(Setoran setoran) {
-        depositRepository.save(setoran);
-        return "Data Berhasil Disimpan";
-    }
+    @Autowired
+    private TargetRepository targetRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    
     public List<Setoran> findAll() {
         return depositRepository.findAll();
     }

@@ -13,12 +13,6 @@ public class TransaksiTabungan {
     @Column
     private Long id;
 
-    @Column(name = "target_id")
-    private Long targetId;
-
-    @Column(name = "user_id")
-    private Long userId;
-
     @Column(name = "jenis_transaksi")
     private String jenisTransaksi;
 
@@ -43,28 +37,20 @@ public class TransaksiTabungan {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "target_id",nullable = false)
+    private TargetTabungan targetTabungan;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTargetId() {
-        return targetId;
-    }
-
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getJenisTransaksi() {
@@ -129,5 +115,21 @@ public class TransaksiTabungan {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public TargetTabungan getTargetTabungan() {
+        return targetTabungan;
+    }
+
+    public void setTargetTabungan(TargetTabungan targetTabungan) {
+        this.targetTabungan = targetTabungan;
     }
 }

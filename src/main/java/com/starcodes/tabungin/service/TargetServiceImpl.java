@@ -58,10 +58,8 @@ public class TargetServiceImpl {
         target.setDeskripsi(valTargetTabunganDto.getDeskripsi());
         target.setSaldoTerkumpul(valTargetTabunganDto.getSaldoTerkumpul());
         target.setStatusTarget(valTargetTabunganDto.getStatusTarget());
-
         return target;
     }
-
     public List<RespTargetTabunganDto> mapToModelMapper(List<TargetTabungan> targetList) {
         return modelMapper.map(targetList, new TypeToken<List<RespTargetTabunganDto>>() {
         }.getType());

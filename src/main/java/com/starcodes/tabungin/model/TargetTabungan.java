@@ -1,10 +1,12 @@
 package com.starcodes.tabungin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -13,6 +15,7 @@ public class TargetTabungan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name  = "target_id")
     private Long id;
 
     @Column(name = "nama_target", nullable = false)
@@ -27,7 +30,7 @@ public class TargetTabungan {
     @Column(name = "periode")
     private String periode;
 
-    @Column(name = "deskrips")
+    @Column(name = "deskripsi")
     private String deskripsi;
 
     @Column(name = "tanggal_mulai_target")
@@ -48,6 +51,10 @@ public class TargetTabungan {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "targetTabungan")
+    @JsonIgnore
+    private List<TransaksiTabungan> transaksiTabunganList;
 
     public Long getId() {
         return id;
@@ -143,5 +150,13 @@ public class TargetTabungan {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<TransaksiTabungan> getTransaksiTabunganList() {
+        return transaksiTabunganList;
+    }
+
+    public void setTransaksiTabunganList(List<TransaksiTabungan> transaksiTabunganList) {
+        this.transaksiTabunganList = transaksiTabunganList;
     }
 }

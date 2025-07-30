@@ -1,11 +1,10 @@
 package com.starcodes.tabungin.dto.validation;
 
-
 import java.time.LocalDate;
 
 public class ValTargetTabunganDto {
-
     private Long id;
+
     private String targetName;
     private Long jumlahDataTarget;
     private Long saldoTerkumpul;

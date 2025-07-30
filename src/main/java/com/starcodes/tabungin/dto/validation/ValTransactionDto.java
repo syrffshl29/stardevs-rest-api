@@ -1,11 +1,10 @@
-package com.starcodes.tabungin.dto;
+package com.starcodes.tabungin.dto.validation;
 
 import java.time.LocalDateTime;
 
-public class TransactionDto {
+public class ValTransactionDto {
     private Long id;
-    private Long targetId;
-    private Long userId;
+
     private String jenisTransaksi;
     private Double jumlahTransaksi;
     private String metodePembayaran;
@@ -14,6 +13,10 @@ public class TransactionDto {
     private String referensiPembayaran;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long userId;
+    private String username;
+    private Long targetId;
+    private String targetName;
 
     public Long getId() {
         return id;
@@ -21,22 +24,6 @@ public class TransactionDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTargetId() {
-        return targetId;
-    }
-
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getJenisTransaksi() {
@@ -101,5 +88,37 @@ public class TransactionDto {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
     }
 }
