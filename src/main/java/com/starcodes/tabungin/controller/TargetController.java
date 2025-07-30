@@ -1,6 +1,7 @@
 package com.starcodes.tabungin.controller;
 
-import com.starcodes.tabungin.dto.TargetTabunganDto;
+
+import com.starcodes.tabungin.dto.validation.ValTargetTabunganDto;
 import com.starcodes.tabungin.model.TargetTabungan;
 import com.starcodes.tabungin.service.TargetServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class TargetController {
     TargetServiceImpl targetServiceImpl;
 
     @PostMapping
-    public Object save(@RequestBody TargetTabunganDto targetTabunganDto) {
+    public Object save(@RequestBody ValTargetTabunganDto targetTabunganDto) {
         return targetServiceImpl.save(targetTabunganDto);
 
     }

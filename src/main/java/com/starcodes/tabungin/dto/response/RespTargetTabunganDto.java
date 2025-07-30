@@ -1,53 +1,21 @@
-package com.starcodes.tabungin.model;
-
-import jakarta.persistence.*;
+package com.starcodes.tabungin.dto.response;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
+public class RespTargetTabunganDto {
 
-@Entity
-@Table(name = "target_tabungan")
-public class TargetTabungan {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "nama_target", nullable = false)
     private String targetName;
-
-    @Column(name = "jumlah_data_target", nullable = false)
     private Long jumlahDataTarget;
-
-    @Column(name = "saldo_terkumpul")
     private Long saldoTerkumpul;
-
-    @Column(name = "periode")
     private String periode;
-
-    @Column(name = "deskrips")
     private String deskripsi;
-
-    @Column(name = "tanggal_mulai_target")
     private LocalDate tanggalMulaiTarget;
-
-    @Column(name = "tanggal_selesai_target")
     private LocalDate tanggalSelesaiTarget;
-
-    @Column(name = "status_target")
     private String statusTarget;
-
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Long userId;
+    private String username;
 
     public Long getId() {
         return id;
@@ -121,27 +89,19 @@ public class TargetTabungan {
         this.statusTarget = statusTarget;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -1,9 +1,6 @@
 package com.starcodes.tabungin.config;
 
-import com.starcodes.tabungin.model.DetailTarget;
 import com.starcodes.tabungin.model.TargetTabungan;
-import com.starcodes.tabungin.model.Users;
-import com.starcodes.tabungin.model.TransaksiTabungan;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
