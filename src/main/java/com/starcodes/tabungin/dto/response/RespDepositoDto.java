@@ -1,8 +1,8 @@
-package com.starcodes.tabungin.dto.validation;
+package com.starcodes.tabungin.dto.response;
 
 import java.time.LocalDateTime;
 
-public class ValDepositoDto {
+public class RespDepositoDto {
 
     private Long id;
     private Double jumlahSetoran;
@@ -13,12 +13,10 @@ public class ValDepositoDto {
     private String catatanSetoran;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String statusVerifikasi;
+    private Long transaksiId;
     private Long userId;
     private String username;
     private Long targetId;
-    private String targetName;
-    private Long transaksiId;
 
     public Long getId() {
         return id;
@@ -92,12 +90,12 @@ public class ValDepositoDto {
         this.updatedAt = updatedAt;
     }
 
-    public String getStatusVerifikasi() {
-        return statusVerifikasi;
+    public Long getTransaksiId() {
+        return transaksiId;
     }
 
-    public void setStatusVerifikasi(String statusVerifikasi) {
-        this.statusVerifikasi = statusVerifikasi;
+    public void setTransaksiId(Long transaksiId) {
+        this.transaksiId = transaksiId;
     }
 
     public Long getUserId() {
@@ -122,21 +120,5 @@ public class ValDepositoDto {
 
     public void setTargetId(Long targetId) {
         this.targetId = targetId;
-    }
-
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    public Long getTransaksiId() {
-        return transaksiId;
-    }
-
-    public void setTransaksiId(Long transaksiId) {
-        this.transaksiId = transaksiId;
     }
 }

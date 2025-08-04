@@ -56,6 +56,10 @@ public class TargetTabungan {
     @JsonIgnore
     private List<TransaksiTabungan> transaksiTabunganList;
 
+    @OneToMany(mappedBy = "targetTabungan")
+    @JsonIgnore
+    private  List<Setoran> setoranList;
+
     public Long getId() {
         return id;
     }
@@ -158,5 +162,13 @@ public class TargetTabungan {
 
     public void setTransaksiTabunganList(List<TransaksiTabungan> transaksiTabunganList) {
         this.transaksiTabunganList = transaksiTabunganList;
+    }
+
+    public List<Setoran> getSetoranList() {
+        return setoranList;
+    }
+
+    public void setSetoranList(List<Setoran> setoranList) {
+        this.setoranList = setoranList;
     }
 }

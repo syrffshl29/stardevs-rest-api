@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 public class TransactionDto {
     private Long id;
-    private Long targetId;
-    private Long userId;
     private String jenisTransaksi;
     private Double jumlahTransaksi;
     private String metodePembayaran;
@@ -14,6 +12,8 @@ public class TransactionDto {
     private String referensiPembayaran;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long targetId;
+    private Long userId;
 
     public Long getId() {
         return id;

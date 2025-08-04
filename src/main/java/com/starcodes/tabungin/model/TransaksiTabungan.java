@@ -1,8 +1,10 @@
 package com.starcodes.tabungin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name ="transaksi_tabungan")
@@ -10,7 +12,7 @@ public class TransaksiTabungan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "transaksi_id")
     private Long id;
 
     @Column(name = "jenis_transaksi")
@@ -38,12 +40,16 @@ public class TransaksiTabungan {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "target_id",nullable = false)
+    @JoinColumn(name = "target_id", nullable = false)
     private TargetTabungan targetTabungan;
+
+    @OneToMany(mappedBy = "transaksiTabungan")
+    @JsonIgnore
+    private List<Setoran> setoranList;
 
     public Long getId() {
         return id;
@@ -131,5 +137,13 @@ public class TransaksiTabungan {
 
     public void setTargetTabungan(TargetTabungan targetTabungan) {
         this.targetTabungan = targetTabungan;
+    }
+
+    public List<Setoran> getSetoranList() {
+        return setoranList;
+    }
+
+    public void setSetoranList(List<Setoran> setoranList) {
+        this.setoranList = setoranList;
     }
 }

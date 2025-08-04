@@ -52,6 +52,10 @@ public class User {
     @JsonIgnore
     private List<TransaksiTabungan> transaksiTabunganList;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Setoran> setoranList;
+
     public Long getId() {
         return Id;
     }
@@ -146,6 +150,14 @@ public class User {
 
     public void setTransaksiTabunganList(List<TransaksiTabungan> transaksiTabunganList) {
         this.transaksiTabunganList = transaksiTabunganList;
+    }
+
+    public List<Setoran> getSetoranList() {
+        return setoranList;
+    }
+
+    public void setSetoranList(List<Setoran> setoranList) {
+        this.setoranList = setoranList;
     }
 }
 

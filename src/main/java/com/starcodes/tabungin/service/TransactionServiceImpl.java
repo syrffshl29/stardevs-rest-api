@@ -35,25 +35,21 @@ public class TransactionServiceImpl {
     @Autowired
     private ModelMapper modelMapper;
 
-
     public Object save(ValTransactionDto valTransactionDto) {
         Optional<User> userOpt = userRepository.findById(valTransactionDto.getUserId());
         Optional<TargetTabungan> targetTabunganOpt = targetRepository.findById(valTransactionDto.getTargetId());
-
         if (userOpt.isEmpty()) {
             return "User not found";
         }
         if (targetTabunganOpt.isEmpty()) {
             return "Target Tabungan not found";
         }
-
         TransaksiTabungan transaksiTabungan = mapToModel(valTransactionDto);
         transaksiTabungan.setUser(userOpt.get());
         transaksiTabungan.setTargetTabungan(targetTabunganOpt.get());
         transactionRepository.save(transaksiTabungan);
         return "Data berhasil disimpan";
     }
-
     public List<TransaksiTabungan> findAll() {
         return transactionRepository.findAll();
     }

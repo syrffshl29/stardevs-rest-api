@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class ValUserDto {
 
-
     private Long id;
     private String username;
     private String email;

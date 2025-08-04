@@ -1,21 +1,26 @@
 package com.starcodes.tabungin.service;
 
+import com.starcodes.tabungin.core.interfaces.IService;
 import com.starcodes.tabungin.dto.validation.ValUserDto;
 import com.starcodes.tabungin.dto.response.RespUserDto;
+import com.starcodes.tabungin.handler.ResponseHandler;
 import com.starcodes.tabungin.model.User;
 import com.starcodes.tabungin.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
-public class UserServiceImpl {
+public class UserServiceImpl implements IService<User> {
 
     @Autowired
     private UserRepository userRepository;
@@ -23,20 +28,51 @@ public class UserServiceImpl {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Object save(User user) {
-        userRepository.save(user);
-        return "Data Berhasil Disimpan";
+    @Override
+    public ResponseEntity<Object> save(User user, HttpServletRequest request) {
+        if(user==null){
+            return new ResponseHandler().handleResponse("Object Null", HttpStatus.BAD_REQUEST,null,"TRN01FV",request);
+        }
+        try {
+            userRepository.save(user);
+        }catch (Exception e){
+            return new ResponseHandler().handleResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR,null,"TRN01FE01",request);
+        }
+        return new ResponseHandler().handleResponse("Data Berhasil Disimpan", HttpStatus.CREATED,null,null,request);
+    }
+    @Override
+    public ResponseEntity<Object> delete(Long id, User user, HttpServletRequest request) {
+        return null;
+    }
+    @Override
+    public ResponseEntity<Object> update(Long id, User user, HttpServletRequest request) {
+        return null;
+    }
+    @Override
+    public ResponseEntity<Object> findById(Long id, User user, HttpServletRequest request) {
+        return userRepository.findById(id)
+                .map(data -> {
+                    RespUserDto dto = modelMapper.map(data, RespUserDto.class);
+                    return new ResponseHandler().handleResponse("Data Ditemukan", HttpStatus.OK, dto, null, request);
+                })
+                .orElseGet(() -> new ResponseHandler().handleResponse("Data Tidak Ditemukan", HttpStatus.NOT_FOUND, null, "TRN01FI", request));
     }
 
-    public Object findAll() {
-        List<User> userList = userRepository.findAll();
-        return mapToModelMapper(userList);
+    @Override
+    public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
+        try {
+            List<User> userList = userRepository.findAll();
+            List<RespUserDto> respList = mapToModelMapper(userList);
+            return new ResponseHandler().handleResponse("Data Ditemukan", HttpStatus.OK, respList, null, request);
+        } catch (Exception e) {
+            return new ResponseHandler().handleResponse("Gagal Mengambil Data", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FA", request);
+        }
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    @Override
+    public ResponseEntity<Object> findByParam(Pageable pageable, String column, String value, HttpServletRequest request) {
+        return null;
     }
-
     public User mapToModelMapper(ValUserDto valUserDto) {
         return modelMapper.map(valUserDto, User.class);
     }
@@ -46,7 +82,6 @@ public class UserServiceImpl {
         }.getType());
     }
 }
-
 /** Mapping dto manual dalam bentuk object*/
     /*     public User mapToModel(ValUserDto valUserDto) {
            User user = new User();

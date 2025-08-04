@@ -4,7 +4,7 @@ public class DepositDto {
 	//input setoran
 
     private Long targetId;
-    private double jumlah;
+    private Double jumlah;
     private String metodePembayaran;
 
     public Long getTargetId() {
@@ -15,11 +15,11 @@ public class DepositDto {
         this.targetId = targetId;
     }
 
-    public double getJumlah() {
+    public Double getJumlah() {
         return jumlah;
     }
 
-    public void setJumlah(double jumlah) {
+    public void setJumlah(Double jumlah) {
         this.jumlah = jumlah;
     }
 

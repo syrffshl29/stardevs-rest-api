@@ -2,13 +2,14 @@ package com.starcodes.tabungin.controller;
 
 import com.starcodes.tabungin.dto.validation.ValUserDto;
 import com.starcodes.tabungin.service.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.starcodes.tabungin.model.User;
 
 
-@RestController // Ganti @RestController menjadi @Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
@@ -16,20 +17,18 @@ public class UserController {
     UserServiceImpl userServiceImpl;
 
     @PostMapping
-    public Object save (@RequestBody ValUserDto valUserDto){
-        return userServiceImpl.save(userServiceImpl.mapToModelMapper(valUserDto));
+    public Object save(@RequestBody ValUserDto valUserDto,
+                       HttpServletRequest request){
+        return userServiceImpl.save(userServiceImpl.mapToModelMapper(valUserDto),request);
     }
-    @GetMapping("/all")
-    public Object getAllUsers(){
-        return userServiceImpl.findAll();
-    }
+    @GetMapping
+    public Object findAll(HttpServletRequest request, Pageable pageable){
 
+        return userServiceImpl.findAll(pageable,request);
+    }
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userServiceImpl.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Object> getUserById(@PathVariable Long id, HttpServletRequest request) {
+        return userServiceImpl.findById(id, null, request);
     }
-
 }
 

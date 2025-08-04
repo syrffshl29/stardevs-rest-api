@@ -11,20 +11,11 @@ public class Setoran {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "setoran_id")
     private Long id;
-
-    @Column(name = "transaksi_id")
-    private Long transaksiId;
-
-    @Column(name = "user_id")
-    private Long userId;
-
-    @Column(name = "target_id")
     private Long targetId;
-
     @Column(name = "jumlah_setoran")
-    private double jumlahSetoran;
+    private Double jumlahSetoran;
 
     @Column(name = "sumber_dana")
     private String sumberDana;
@@ -47,28 +38,22 @@ public class Setoran {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "transaksi_id", nullable = false)
+    private TransaksiTabungan transaksiTabungan;
+    @ManyToOne
+    @JoinColumn(name = "target_id", nullable = false)
+    private TargetTabungan targetTabungan;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTransaksiId() {
-        return transaksiId;
-    }
-
-    public void setTransaksiId(Long transaksiId) {
-        this.transaksiId = transaksiId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public Long getTargetId() {
@@ -79,11 +64,11 @@ public class Setoran {
         this.targetId = targetId;
     }
 
-    public double getJumlahSetoran() {
+    public Double getJumlahSetoran() {
         return jumlahSetoran;
     }
 
-    public void setJumlahSetoran(double jumlahSetoran) {
+    public void setJumlahSetoran(Double jumlahSetoran) {
         this.jumlahSetoran = jumlahSetoran;
     }
 
@@ -141,5 +126,29 @@ public class Setoran {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public TransaksiTabungan getTransaksiTabungan() {
+        return transaksiTabungan;
+    }
+
+    public void setTransaksiTabungan(TransaksiTabungan transaksiTabungan) {
+        this.transaksiTabungan = transaksiTabungan;
+    }
+
+    public TargetTabungan getTargetTabungan() {
+        return targetTabungan;
+    }
+
+    public void setTargetTabungan(TargetTabungan targetTabungan) {
+        this.targetTabungan = targetTabungan;
     }
 }
