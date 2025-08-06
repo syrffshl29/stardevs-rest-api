@@ -1,9 +1,11 @@
 package com.starcodes.tabungin.service;
 
 
+import com.starcodes.tabungin.core.interfaces.IService;
 import com.starcodes.tabungin.dto.response.RespDepositoDto;
 import com.starcodes.tabungin.dto.response.RespTransactionDto;
 import com.starcodes.tabungin.dto.validation.ValDepositoDto;
+import com.starcodes.tabungin.handler.ResponseHandler;
 import com.starcodes.tabungin.model.Setoran;
 import com.starcodes.tabungin.model.TargetTabungan;
 import com.starcodes.tabungin.model.TransaksiTabungan;
@@ -12,9 +14,13 @@ import com.starcodes.tabungin.repository.DepositRepository;
 import com.starcodes.tabungin.repository.TargetRepository;
 import com.starcodes.tabungin.repository.TransactionRepository;
 import com.starcodes.tabungin.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,64 +30,68 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class DepositServiceImpl {
+public class DepositServiceImpl implements IService<Setoran> {
 
     @Autowired
     private DepositRepository depositRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-    
-    @Autowired
-    private TargetRepository targetRepository;
-    
-    @Autowired
-    private TransactionRepository transactionRepository;
     
     @Autowired
     private ModelMapper modelMapper;
 
-    public Object save(ValDepositoDto valDepositoDto) {
-        Optional<User> userOpt = userRepository.findById(valDepositoDto.getUserId());
-        Optional<TargetTabungan> targetTabunganOpt = targetRepository.findById(valDepositoDto.getTargetId());
-        Optional<TransaksiTabungan> transaksiTabunganOpt = transactionRepository.findById(valDepositoDto.getTransaksiId());
-        
-        if (userOpt.isEmpty()) {
-            return "User not found";
+    @Override
+    public ResponseEntity<Object> save(Setoran setoran, HttpServletRequest request) {
+        if(setoran==null){
+            return new ResponseHandler().handleResponse("Object Null", HttpStatus.BAD_REQUEST,null,"TRN01FV",request);
         }
-        if (targetTabunganOpt.isEmpty()) {
-            return "Target Tabungan not found";
+        try {
+            depositRepository.save(setoran);
+        }catch (Exception e){
+            return new ResponseHandler().handleResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR,null,"TRN01FE01",request);
         }
-        if (transaksiTabunganOpt.isEmpty()) {
-            return "Transaksi Tabungan not found";
-        }
-        Setoran setoran = mapToModel(valDepositoDto);
-        setoran.setUser(userOpt.get());
-        setoran.setTargetTabungan(targetTabunganOpt.get());
-        setoran.setTransaksiTabungan(transaksiTabunganOpt.get());
-        depositRepository.save(setoran);
-        return "Data berhasil disimpan";
-    }
-    public List<Setoran> findAll() {
-        return depositRepository.findAll();
+        return new ResponseHandler().handleResponse("Data Berhasil Disimpan", HttpStatus.CREATED,null,null,request);
     }
 
-    public Optional<Setoran> findById(Long id) {
-        return depositRepository.findById(id);
+    @Override
+    public ResponseEntity<Object> delete(Long id, Setoran setoran, HttpServletRequest request) {
+        return null;
     }
-    public Setoran mapToModel(ValDepositoDto valDepositoDto) {
-        Setoran setoran = new Setoran();
-        setoran.setCatatanSetoran(valDepositoDto.getCatatanSetoran());
-        setoran.setBuktiSetoran(valDepositoDto.getBuktiSetoran());
-        setoran.setSumberDana(valDepositoDto.getSumberDana());
-        setoran.setStatusVerifikasi(valDepositoDto.getStatusVerifikasi());
-        setoran.setJumlahSetoran(valDepositoDto.getJumlahSetoran());
-        setoran.setCreatedAt(valDepositoDto.getCreatedAt());
-        setoran.setUpdatedAt(valDepositoDto.getUpdatedAt());
-        return setoran;
+
+    @Override
+    public ResponseEntity<Object> update(Long id, Setoran setoran, HttpServletRequest request) {
+        return null;
     }
-    public List<RespDepositoDto> mapToModelMapper(List<Setoran> setoranList) {
-        return modelMapper.map(setoranList, new TypeToken<List<RespTransactionDto>>() {
+
+    @Override
+    public ResponseEntity<Object> findById(Long id, Setoran setoran, HttpServletRequest request) {
+        return depositRepository.findById(id)
+                .map(data ->{
+                    RespDepositoDto dto = modelMapper.map(data, RespDepositoDto.class);
+                    return new ResponseHandler().handleResponse("Data Ditemukan", HttpStatus.OK, dto, null, request);
+                })
+                .orElseGet(()-> new ResponseHandler().handleResponse("Data Tidak Ditemukan",HttpStatus.NOT_FOUND,null,null,request));
+    }
+
+    @Override
+    public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
+        try{
+            List<Setoran> setoranList = depositRepository.findAll();
+            List<RespDepositoDto> respList = mapToModelMapper(setoranList);
+            return new ResponseHandler().handleResponse("Data Ditemukan", HttpStatus.OK, respList, null, request);
+        }catch (Exception e){
+            return new ResponseHandler().handleResponse("Gagal Mengambil Data", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FA", request);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> findByParam(Pageable pageable, String column, String value, HttpServletRequest request) {
+        return null;
+    }
+    public Setoran mapToModelMapper(ValDepositoDto valDepositoDto){
+        return modelMapper.map(valDepositoDto, Setoran.class);
+    }
+    public List<RespDepositoDto>mapToModelMapper(List<Setoran> setoranList){
+        return modelMapper.map(setoranList,new TypeToken<List<RespDepositoDto>>(){
         }.getType());
     }
 }

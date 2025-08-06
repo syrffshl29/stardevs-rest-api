@@ -15,7 +15,7 @@ public class ValTransactionDto {
     private LocalDateTime updatedAt;
     private Long userId;
     private String username;
-    private Long targetId;
+    private Long targetTabunganId;
     private String targetName;
 
     public Long getId() {
@@ -106,12 +106,12 @@ public class ValTransactionDto {
         this.username = username;
     }
 
-    public Long getTargetId() {
-        return targetId;
+    public Long getTargetTabunganId() {
+        return targetTabunganId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setTargetTabunganId(Long targetTabunganId) {
+        this.targetTabunganId = targetTabunganId;
     }
 
     public String getTargetName() {

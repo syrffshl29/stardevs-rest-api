@@ -21,7 +21,7 @@ public class UserController {
                        HttpServletRequest request){
         return userServiceImpl.save(userServiceImpl.mapToModelMapper(valUserDto),request);
     }
-    @GetMapping
+    @GetMapping("/all")
     public Object findAll(HttpServletRequest request, Pageable pageable){
 
         return userServiceImpl.findAll(pageable,request);

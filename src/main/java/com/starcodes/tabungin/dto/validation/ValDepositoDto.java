@@ -16,9 +16,9 @@ public class ValDepositoDto {
     private String statusVerifikasi;
     private Long userId;
     private String username;
-    private Long targetId;
+    private Long targetTabunganId;
     private String targetName;
-    private Long transaksiId;
+    private Long transaksiTabunganId;
 
     public Long getId() {
         return id;
@@ -116,12 +116,12 @@ public class ValDepositoDto {
         this.username = username;
     }
 
-    public Long getTargetId() {
-        return targetId;
+    public Long getTargetTabunganId() {
+        return targetTabunganId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setTargetTabunganId(Long targetTabunganId) {
+        this.targetTabunganId = targetTabunganId;
     }
 
     public String getTargetName() {
@@ -132,11 +132,11 @@ public class ValDepositoDto {
         this.targetName = targetName;
     }
 
-    public Long getTransaksiId() {
-        return transaksiId;
+    public Long getTransaksiTabunganId() {
+        return transaksiTabunganId;
     }
 
-    public void setTransaksiId(Long transaksiId) {
-        this.transaksiId = transaksiId;
+    public void setTransaksiTabunganId(Long transaksiTabunganId) {
+        this.transaksiTabunganId = transaksiTabunganId;
     }
 }

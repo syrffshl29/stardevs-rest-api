@@ -20,7 +20,7 @@ public class TargetController {
                        HttpServletRequest request){
         return targetServiceImpl.save(targetServiceImpl.mapToModelMapper(valTargetTabunganDto),request);
     }
-    @GetMapping
+    @GetMapping("/all")
     public Object findAll(HttpServletRequest request, Pageable pageable){
         return targetServiceImpl.findAll(pageable,request);
     }
