@@ -1,4 +1,4 @@
-package com.starcodes.tabungin.dto;
+package com.starcodes.tabungin.dto.validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

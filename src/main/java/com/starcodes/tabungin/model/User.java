@@ -2,14 +2,17 @@ package com.starcodes.tabungin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -17,93 +20,94 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long Id;
+    @Column(name = "ID")
+    private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "Username" , length = 16, nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "Email",length = 256,nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "NoHp",length = 18,nullable = false,unique = true)//08,+62,62-- 0/62/+62
+    private String noHp;
+
+    @Column(name = "Password",length = 64,nullable = false)
     private String password;
 
-    @Column(name = "nama_lengkap", nullable = false)
-    private String fullName;
+    @Column(name = "NamaLengkap",
+            length = 70,//panjang 70 karakter
+            nullable = false//wajib diisi,
+    )
+    private String namaLengkap;
 
-    @Column(name = "no_telp", nullable = false)
-    private String phone;
+    @Column(name = "Alamat",length = 255,nullable = false)
+    private String alamat;
 
-    @Column(name = "is_active")
-    private Boolean active;
+    @Column(name = "TanggalLahir",nullable = false)
+    private LocalDate tanggalLahir;
 
-    @Column(name = "last_login")
-    private LocalDateTime lastLogin;
+    @Transient
+    private Integer umur;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Transient
+    private String passwordConfirmation;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "OTP",length = 64)
+    private String otp;
 
-    @Column(name = "token_estafet",length = 64)
-    private String token;
+    @Column(name = "IsRegistered")
+    private Boolean isRegistered;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<TargetTabungan> targetTabunganList;
+    @Column(name = "LinkImage", length = 256)
+    private String linkImage;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<TransaksiTabungan> transaksiTabunganList;
+    @Column(name = "PathImage",length = 256)
+    private String pathImage;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Setoran> setoranList;
+    @Column(name = "CreatedBy",nullable = false,updatable = false)
+    private Long createdBy=1L;
 
+    @Column(name = "CreatedDate",updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 
+    @Column(name = "ModifiedBy",insertable = false)
+    private Long modifiedBy;
+
+    @Column(name = "ModifiedDate",insertable = false)
+    @UpdateTimestamp
+    private LocalDateTime modifiedDate;
+
+    @Column(name = "TokenEstafet",length = 64)
+    private String tokenEstafet;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IDAkses",foreignKey = @ForeignKey(name = "fk-user-to-akses"))
+    private Akses akses;
+
+    /** disini letak role dari user nya yang akan di baca di API nanti */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<Menu> lt = this.akses.getListMenu();
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        for (Menu m :lt) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(m.getNama()));
+        }
+        return grantedAuthorities;
     }
 
-    @Override
-    public String getPassword() {
-        return "";
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String getUsername() {
-        return "";
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
-    }
-
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
+        return username;
     }
 
     public void setUsername(String username) {
@@ -118,88 +122,141 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public String getNoHp() {
+        return noHp;
+    }
+
+    public void setNoHp(String noHp) {
+        this.noHp = noHp;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getNamaLengkap() {
+        return namaLengkap;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getAlamat() {
+        return alamat;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
     }
 
-    public Boolean getActive() {
-        return active;
+    public LocalDate getTanggalLahir() {
+        return tanggalLahir;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setTanggalLahir(LocalDate tanggalLahir) {
+        this.tanggalLahir = tanggalLahir;
     }
 
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
+    public Integer getUmur() {
+        return umur;
     }
 
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
+    public void setUmur(Integer umur) {
+        this.umur = umur;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public String getPasswordConfirmation() {
+        return passwordConfirmation;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setPasswordConfirmation(String passwordConfirmation) {
+        this.passwordConfirmation = passwordConfirmation;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public String getOtp() {
+        return otp;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 
-    public String getToken() {
-        return token;
+    public Boolean getRegistered() {
+        return isRegistered;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setRegistered(Boolean registered) {
+        isRegistered = registered;
     }
 
-    public List<TargetTabungan> getTargetTabunganList() {
-        return targetTabunganList;
+    public String getLinkImage() {
+        return linkImage;
     }
 
-    public void setTargetTabunganList(List<TargetTabungan> targetTabunganList) {
-        this.targetTabunganList = targetTabunganList;
+    public void setLinkImage(String linkImage) {
+        this.linkImage = linkImage;
     }
 
-    public List<TransaksiTabungan> getTransaksiTabunganList() {
-        return transaksiTabunganList;
+    public String getPathImage() {
+        return pathImage;
     }
 
-    public void setTransaksiTabunganList(List<TransaksiTabungan> transaksiTabunganList) {
-        this.transaksiTabunganList = transaksiTabunganList;
+    public void setPathImage(String pathImage) {
+        this.pathImage = pathImage;
     }
 
-    public List<Setoran> getSetoranList() {
-        return setoranList;
+    public Long getCreatedBy() {
+        return createdBy;
     }
 
-    public void setSetoranList(List<Setoran> setoranList) {
-        this.setoranList = setoranList;
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Long getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(Long modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    public String getTokenEstafet() {
+        return tokenEstafet;
+    }
+
+    public void setTokenEstafet(String tokenEstafet) {
+        this.tokenEstafet = tokenEstafet;
+    }
+
+    public Akses getAkses() {
+        return akses;
+    }
+
+    public void setAkses(Akses akses) {
+        this.akses = akses;
     }
 }
 
