@@ -21,11 +21,11 @@ public class AuthController {
     AuthServiceImpl authServiceImpl;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registration(@Valid @RequestBody RegisterDto regisDTO
+    public ResponseEntity<Object> register(@Valid @RequestBody RegisterDto registerDto
             , HttpServletRequest request
 
     ){
-        return authServiceImpl.register(authServiceImpl.mapToUser(regisDTO),request);
+        return authServiceImpl.register(authServiceImpl.mapToUser(registerDto),request);
 
 //        return new ResponseHandler().handleResponse("DATA DITERIMA", HttpStatus.OK,"OK",null,request);
     }

@@ -24,7 +24,6 @@ public class RegisterDto {
 
     @Pattern(regexp = "^(62|\\+62|0)8[0-9]{9,13}$",
             message = "Format No HP Tidak Valid , min 9 max 13 setelah angka 8, contoh : (0/62/+62)81111111")
-    @JsonProperty("no_hp")
     private String noHp;
 
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@_#\\-$])[\\w].{8,15}$",
@@ -32,11 +31,9 @@ public class RegisterDto {
     private String password;
 
     @Pattern(regexp = "^[a-zA-Z\\s]{4,70}$",message = "Hanya Alfabet dan spasi Minimal 4 Maksimal 70")
-    @JsonProperty("nama_lengkap")
     private String namaLengkap;
 
-    @Pattern(regexp = "^[\\w\\s\\.\\,]{20,255}$",
-            message = "Format Alamat Tidak Valid min 20 maks 255, contoh : Jln. Kenari 2B jakbar 11480")
+    @Pattern(regexp = "^.{20,256}$", message = "Alamat harus antara 20 sampai 255 karakter")
     private String alamat;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

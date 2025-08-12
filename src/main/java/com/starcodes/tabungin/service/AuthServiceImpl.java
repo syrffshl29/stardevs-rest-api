@@ -60,9 +60,9 @@ public class AuthServiceImpl implements UserDetailsService {
             user.setPassword(BcryptImpl.hash(user.getUsername() + user.getPassword()));
 
             // Default akses id=2
-            Akses akses = new Akses();
-            akses.setId(2L);
-            user.setAkses(akses);
+            Akses role = new Akses();
+            role.setId(2L);
+            user.setAkses(role);
 
             userRepository.save(user);
 
@@ -217,7 +217,6 @@ public class AuthServiceImpl implements UserDetailsService {
         }
         return ltMenuDTO;
     }
-
     // Mapping manual jika perlu
     public User mapToUser(RegisterDto registerDTO) {
         User user = new User();
@@ -226,6 +225,8 @@ public class AuthServiceImpl implements UserDetailsService {
         user.setNamaLengkap(registerDTO.getNamaLengkap());
         user.setPassword(registerDTO.getPassword());
         user.setUsername(registerDTO.getUsername());
+        user.setAlamat(registerDTO.getAlamat());
+        user.setTanggalLahir(registerDTO.getTanggalLahir());
         return user;
     }
 

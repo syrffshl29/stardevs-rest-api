@@ -35,13 +35,10 @@ public class User implements UserDetails {
     @Column(name = "Password",length = 64,nullable = false)
     private String password;
 
-    @Column(name = "NamaLengkap",
-            length = 70,//panjang 70 karakter
-            nullable = false//wajib diisi,
-    )
+    @Column(name = "NamaLengkap",length = 70,nullable = false)
     private String namaLengkap;
 
-    @Column(name = "Alamat",length = 255,nullable = false)
+    @Column(name = "Alamat",length = 256,nullable = false)
     private String alamat;
 
     @Column(name = "TanggalLahir",nullable = false)

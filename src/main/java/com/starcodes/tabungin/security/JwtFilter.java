@@ -1,11 +1,6 @@
 package com.starcodes.tabungin.security;
 
-
-import com.starcodes.tabungin.config.JwtConfig;
-import com.starcodes.tabungin.core.MyHttpServletRequestWrapper;
 import com.starcodes.tabungin.service.AuthServiceImpl;
-import com.starcodes.tabungin.util.LoggingFile;
-import com.starcodes.tabungin.util.RequestCapture;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +18,6 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-
     @Autowired
     private JwtUtility jwtUtility;
 
@@ -33,44 +27,43 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/auth/register") || path.equals("/api/auth/login");
+        // skip filter untuk path register dan login supaya tidak perlu token
+        return path.startsWith("/api/auth/register") || path.startsWith("/api/auth/login");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorization = request.getHeader("Authorization");
-        authorization = authorization == null ? "" : authorization;
-        String token = "";
-        String username = "";
-        try{
-            if(!"".equals(authorization) &&
-                    authorization.startsWith("Bearer ") &&
-                    authorization.length() > 7){
-                token = authorization.substring(7);
-                if(JwtConfig.getTokenEncryptEnable().equals("y")){
-                    token = Crypto.performDecrypt(token);
-                }
-                username = jwtUtility.getUsernameFromToken(token);
-                String strContentType = request.getContentType()==null?"":request.getContentType();
-                if(!strContentType.startsWith("multipart/form-data") || "".equals(strContentType)){
-                    request = new MyHttpServletRequestWrapper(request);
-                }
-                if(username != null && SecurityContextHolder.getContext().getAuthentication()== null){
-                    if(jwtUtility.validateToken(token)){
-                        UserDetails userDetails = authServiceImpl.loadUserByUsername(username);
-                        /** persiapan konteks permission / izin / hak ases nya saat di dorong ke controller nantinya */
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
-                }
 
-            }
-        }catch (Exception e){
-            LoggingFile.logException("JwtFilter","doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) "+ RequestCapture.allRequest(request),e);
+        String authHeader = request.getHeader("Authorization");
+        String token = null;
+        String username = null;
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+
+            // ambil username dari token JWT
+            username = jwtUtility.getUsernameFromToken(token);
         }
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // load user details dari DB atau user service
+            UserDetails userDetails = authServiceImpl.loadUserByUsername(username);
+
+            // validasi token JWT (misal cek expiry, signature, dsb)
+            if (jwtUtility.validateToken(token)) {
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
         filterChain.doFilter(request, response);
     }
 }
