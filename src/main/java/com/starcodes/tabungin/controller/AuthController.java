@@ -3,13 +3,11 @@ package com.starcodes.tabungin.controller;
 import com.starcodes.tabungin.dto.validation.LoginDto;
 import com.starcodes.tabungin.dto.validation.RegisterDto;
 import com.starcodes.tabungin.dto.validation.VerifyRegisterDto;
-import com.starcodes.tabungin.handler.ResponseHandler;
 import com.starcodes.tabungin.security.AESGeneratedKey;
 import com.starcodes.tabungin.service.AuthServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,7 +61,6 @@ public class AuthController {
     public String tokenExpired(){
         return "Your Key : "+ AESGeneratedKey.getKey();
     }
-
 //    @PostMapping("/lupapasswordstepone")
 //    public Object lupaPasswordStepOne(@Valid @RequestBody LupaPasswordStepOneDTO lupaPasswordStepOneDTO,
 //    HttpServletRequest request){
