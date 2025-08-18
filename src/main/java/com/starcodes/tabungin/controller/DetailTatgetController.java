@@ -18,7 +18,7 @@ public class DetailTatgetController {
         @Autowired
         private DetailTargetServiceImpl detailTargetServiceImpl;
 
-        @GetMapping
+        @GetMapping("/all")
         public Object findAll(HttpServletRequest request, Pageable pageable) {
             return detailTargetServiceImpl.findAll();
         }

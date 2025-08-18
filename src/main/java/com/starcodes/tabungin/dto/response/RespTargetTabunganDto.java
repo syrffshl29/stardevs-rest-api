@@ -1,6 +1,5 @@
 package com.starcodes.tabungin.dto.response;
 
-
 import java.time.LocalDate;
 
 public class RespTargetTabunganDto {

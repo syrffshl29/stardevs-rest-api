@@ -13,19 +13,29 @@ import org.springframework.web.bind.annotation.*;
 public class TransaksiTabunganController {
 
     @Autowired
-    TransactionServiceImpl transactionServiceImpl;
+    private TransactionServiceImpl transactionServiceImpl;
 
-    @PostMapping
-    public Object save(@RequestBody ValTransactionDto valTransactionDto,
-                       HttpServletRequest request) {
-        return transactionServiceImpl.save(transactionServiceImpl.mapToModelMapper(valTransactionDto),request);
+    @PostMapping("/save")
+    public ResponseEntity<Object> save(@RequestBody ValTransactionDto valTransactionDto,
+                                       HttpServletRequest request) {
+        return transactionServiceImpl.save(valTransactionDto, request);
     }
     @GetMapping("/all")
-    public Object findAll(HttpServletRequest request, Pageable pageable) {
-        return transactionServiceImpl.findAll(pageable,request);
+    public ResponseEntity<Object> findAll(HttpServletRequest request, Pageable pageable) {
+        return transactionServiceImpl.findAll(pageable, request);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable Long id, HttpServletRequest request) {
-    return transactionServiceImpl.findById(id, null, request);
+    public ResponseEntity<Object> findById(@PathVariable Long id, HttpServletRequest request) {
+        return transactionServiceImpl.findById(id, null, request);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Object> update(@PathVariable Long id,
+                                         @RequestBody ValTransactionDto valTransactionDto,
+                                         HttpServletRequest request) {
+        return transactionServiceImpl.update(id, transactionServiceImpl.mapToEntity(valTransactionDto), request);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Object> delete(@PathVariable Long id, HttpServletRequest request) {
+        return transactionServiceImpl.delete(id, null, request);
     }
 }
