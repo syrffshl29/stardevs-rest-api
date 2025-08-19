@@ -19,7 +19,7 @@ public class TransaksiTabungan {
     private String jenisTransaksi;
 
     @Column(name = "jumlah_transaksi")
-    private double jumlahTransaksi;
+    private Double jumlahTransaksi;
 
     @Column(name = "metode_pembayaran")
     private String metodePembayaran;
@@ -43,7 +43,7 @@ public class TransaksiTabungan {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "target_id", nullable = false)
     private TargetTabungan targetTabungan;
 
@@ -67,11 +67,11 @@ public class TransaksiTabungan {
         this.jenisTransaksi = jenisTransaksi;
     }
 
-    public double getJumlahTransaksi() {
+    public Double getJumlahTransaksi() {
         return jumlahTransaksi;
     }
 
-    public void setJumlahTransaksi(double jumlahTransaksi) {
+    public void setJumlahTransaksi(Double jumlahTransaksi) {
         this.jumlahTransaksi = jumlahTransaksi;
     }
 

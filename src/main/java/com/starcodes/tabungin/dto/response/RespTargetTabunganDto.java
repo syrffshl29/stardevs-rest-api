@@ -6,8 +6,8 @@ public class RespTargetTabunganDto {
 
     private Long id;
     private String targetName;
-    private Long jumlahDataTarget;
-    private Long saldoTerkumpul;
+    private Double hargaTarget;
+    private Double danaTerkumpul;
     private String periode;
     private String deskripsi;
     private LocalDate tanggalMulaiTarget;
@@ -32,20 +32,20 @@ public class RespTargetTabunganDto {
         this.targetName = targetName;
     }
 
-    public Long getJumlahDataTarget() {
-        return jumlahDataTarget;
+    public Double getHargaTarget() {
+        return hargaTarget;
     }
 
-    public void setJumlahDataTarget(Long jumlahDataTarget) {
-        this.jumlahDataTarget = jumlahDataTarget;
+    public void setHargaTarget(Double hargaTarget) {
+        this.hargaTarget = hargaTarget;
     }
 
-    public Long getSaldoTerkumpul() {
-        return saldoTerkumpul;
+    public Double getDanaTerkumpul() {
+        return danaTerkumpul;
     }
 
-    public void setSaldoTerkumpul(Long saldoTerkumpul) {
-        this.saldoTerkumpul = saldoTerkumpul;
+    public void setDanaTerkumpul(Double danaTerkumpul) {
+        this.danaTerkumpul = danaTerkumpul;
     }
 
     public String getPeriode() {

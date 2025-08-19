@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<TransaksiTabungan, Long> {
+public interface TransaksiRepository extends JpaRepository<TransaksiTabungan, Long> {
 
     // Cari semua transaksi berdasarkan username
-
+    List<TransaksiTabungan> findByTargetTabunganId(Long targetTabunganId);
     // Query lain tetap bisa
     List<TransaksiTabungan> findByJenisTransaksiContainingIgnoreCase(String jenisTransaksi);
     List<TransaksiTabungan> findByStatusTransaksiContainingIgnoreCase(String statusTransaksi);

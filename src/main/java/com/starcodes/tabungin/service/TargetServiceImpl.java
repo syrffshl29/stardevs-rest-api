@@ -1,10 +1,14 @@
 package com.starcodes.tabungin.service;
 
 import com.starcodes.tabungin.core.interfaces.IService;
+import com.starcodes.tabungin.core.interfaces.TargetService;
+import com.starcodes.tabungin.dto.response.RespDetailTargetDto;
 import com.starcodes.tabungin.dto.response.RespTargetTabunganDto;
+import com.starcodes.tabungin.dto.response.RespTransaksiTabunganDto;
 import com.starcodes.tabungin.dto.validation.ValTargetTabunganDto;
 import com.starcodes.tabungin.handler.ResponseHandler;
 import com.starcodes.tabungin.model.TargetTabungan;
+import com.starcodes.tabungin.model.TransaksiTabungan;
 import com.starcodes.tabungin.model.User;
 import com.starcodes.tabungin.repository.TargetRepository;
 import com.starcodes.tabungin.repository.UserRepository;
@@ -24,7 +28,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class TargetServiceImpl implements IService<TargetTabungan> {
+public class TargetServiceImpl implements TargetService<TargetTabungan> {
 
     @Autowired
     private TargetRepository targetRepository;
@@ -37,6 +41,9 @@ public class TargetServiceImpl implements IService<TargetTabungan> {
 
     @Autowired
     private JwtUtility jwtUtility;
+
+    @Autowired
+    private TransaksiServiceImpl transaksiServiceImpl;
 
     @Override
     public ResponseEntity<Object> save(TargetTabungan targetTabungan, HttpServletRequest request) {
@@ -59,7 +66,7 @@ public class TargetServiceImpl implements IService<TargetTabungan> {
             // Set field default
             targetTabungan.setCreatedAt(LocalDateTime.now());
             targetTabungan.setUpdatedAt(LocalDateTime.now());
-            if(targetTabungan.getSaldoTerkumpul() == null) targetTabungan.setSaldoTerkumpul(0L);
+            if(targetTabungan.getDanaTerkumpul() == null) targetTabungan.setDanaTerkumpul(0.0);
             if(targetTabungan.getStatusTarget() == null) targetTabungan.setStatusTarget("ACTIVE");
 
             targetRepository.save(targetTabungan);
@@ -83,7 +90,7 @@ public class TargetServiceImpl implements IService<TargetTabungan> {
         return targetRepository.findById(id).map(existing -> {
             existing.setTargetName(targetTabungan.getTargetName());
             existing.setDeskripsi(targetTabungan.getDeskripsi());
-            existing.setJumlahDataTarget(targetTabungan.getJumlahDataTarget());
+            existing.setHargaTarget(targetTabungan.getHargaTarget());
             existing.setPeriode(targetTabungan.getPeriode());
             existing.setTanggalMulaiTarget(targetTabungan.getTanggalMulaiTarget());
             existing.setTanggalSelesaiTarget(targetTabungan.getTanggalSelesaiTarget());
@@ -121,7 +128,48 @@ public class TargetServiceImpl implements IService<TargetTabungan> {
         return new ResponseHandler().handleResponse("Method Belum Implemented", HttpStatus.NOT_IMPLEMENTED, null, "TRN01FP", request);
     }
 
+    @Override
+    public ResponseEntity<Object> findByTargetId(Long targetId, HttpServletRequest request) {
+        return null;
+    }
+
     public TargetTabungan mapToModelMapper(ValTargetTabunganDto valTargetTabunganDto) {
         return modelMapper.map(valTargetTabunganDto, TargetTabungan.class);
+    }
+    @Override
+    public ResponseEntity<Object> findDetailTarget(Long targetId, HttpServletRequest request) {
+        return targetRepository.findById(targetId)
+                .map(target -> {
+                    // Ambil transaksi langsung sebagai list DTO
+                    List<RespTransaksiTabunganDto> transaksiDtoList = transaksiServiceImpl.getListByTargetId(targetId);
+
+                    // Hitung dana terkumpul
+                    Double danaTerkumpul = transaksiDtoList.stream()
+                            .mapToDouble(RespTransaksiTabunganDto::getJumlahTransaksi)
+                            .sum();
+
+                    // Hitung progress
+                    double progress = 0;
+                    if(target.getHargaTarget() != null && target.getHargaTarget() > 0){
+                        progress = danaTerkumpul / target.getHargaTarget() * 100;
+                    }
+
+                    // Mapping ke RespDetailTargetDto
+                    RespDetailTargetDto dto = new RespDetailTargetDto();
+                    dto.setId(target.getId());
+                    dto.setTargetName(target.getTargetName());
+                    dto.setHargaTarget(target.getHargaTarget());
+                    dto.setDanaTerkumpul(danaTerkumpul);
+                    dto.setProgress(progress);
+                    dto.setTanggalMulaiTarget(target.getTanggalMulaiTarget());
+                    dto.setTanggalSelesaiTarget(target.getTanggalSelesaiTarget());
+                    dto.setCatatan(target.getDeskripsi());
+                    dto.setCreatedAt(target.getCreatedAt());
+                    dto.setUpdatedAt(target.getUpdatedAt());
+                    dto.setTransaksiList(transaksiDtoList);
+
+                    return new ResponseHandler().handleResponse("Detail Target Ditemukan", HttpStatus.OK, dto, null, request);
+                })
+                .orElseGet(() -> new ResponseHandler().handleResponse("Target Tidak Ditemukan", HttpStatus.NOT_FOUND, null, "TRN01FD", request));
     }
 }

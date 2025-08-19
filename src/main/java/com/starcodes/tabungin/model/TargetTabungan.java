@@ -21,11 +21,11 @@ public class TargetTabungan {
     @Column(name = "nama_target", nullable = false)
     private String targetName;
 
-    @Column(name = "jumlah_data_target", nullable = false)
-    private Long jumlahDataTarget;
+    @Column(name = "harga_target", nullable = false)
+    private Double hargaTarget;
 
-    @Column(name = "saldo_terkumpul")
-    private Long saldoTerkumpul;
+    @Column(name = "dana_terkumpul")
+    private Double danaTerkumpul;
 
     @Column(name = "periode")
     private String periode;
@@ -52,7 +52,7 @@ public class TargetTabungan {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "targetTabungan")
+    @OneToMany(mappedBy = "targetTabungan",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<TransaksiTabungan> transaksiTabunganList;
 
@@ -76,20 +76,20 @@ public class TargetTabungan {
         this.targetName = targetName;
     }
 
-    public Long getJumlahDataTarget() {
-        return jumlahDataTarget;
+    public Double getHargaTarget() {
+        return hargaTarget;
     }
 
-    public void setJumlahDataTarget(Long jumlahDataTarget) {
-        this.jumlahDataTarget = jumlahDataTarget;
+    public void setHargaTarget(Double hargaTarget) {
+        this.hargaTarget = hargaTarget;
     }
 
-    public Long getSaldoTerkumpul() {
-        return saldoTerkumpul;
+    public Double getDanaTerkumpul() {
+        return danaTerkumpul;
     }
 
-    public void setSaldoTerkumpul(Long saldoTerkumpul) {
-        this.saldoTerkumpul = saldoTerkumpul;
+    public void setDanaTerkumpul(Double danaTerkumpul) {
+        this.danaTerkumpul = danaTerkumpul;
     }
 
     public String getPeriode() {

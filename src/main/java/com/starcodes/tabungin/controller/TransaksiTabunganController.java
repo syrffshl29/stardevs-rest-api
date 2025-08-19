@@ -1,7 +1,7 @@
 package com.starcodes.tabungin.controller;
 
-import com.starcodes.tabungin.dto.validation.ValTransactionDto;
-import com.starcodes.tabungin.service.TransactionServiceImpl;
+import com.starcodes.tabungin.dto.validation.ValTransaksiTabunganDto;
+import com.starcodes.tabungin.service.TransaksiServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,29 +13,34 @@ import org.springframework.web.bind.annotation.*;
 public class TransaksiTabunganController {
 
     @Autowired
-    private TransactionServiceImpl transactionServiceImpl;
+    private TransaksiServiceImpl transaksiServiceImpl;
 
-    @PostMapping("/save")
-    public ResponseEntity<Object> save(@RequestBody ValTransactionDto valTransactionDto,
+    @PostMapping
+    public ResponseEntity<Object> save(@RequestBody ValTransaksiTabunganDto valTransaksiTabunganDto,
                                        HttpServletRequest request) {
-        return transactionServiceImpl.save(valTransactionDto, request);
+        return transaksiServiceImpl.save(valTransaksiTabunganDto, request);
     }
     @GetMapping("/all")
     public ResponseEntity<Object> findAll(HttpServletRequest request, Pageable pageable) {
-        return transactionServiceImpl.findAll(pageable, request);
+        return transaksiServiceImpl.findAll(pageable, request);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable Long id, HttpServletRequest request) {
-        return transactionServiceImpl.findById(id, null, request);
+        return transaksiServiceImpl.findById(id, null, request);
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id,
-                                         @RequestBody ValTransactionDto valTransactionDto,
+                                         @RequestBody ValTransaksiTabunganDto valTransaksiTabunganDto,
                                          HttpServletRequest request) {
-        return transactionServiceImpl.update(id, transactionServiceImpl.mapToEntity(valTransactionDto), request);
+        return transaksiServiceImpl.update(id, transaksiServiceImpl.mapToEntity(valTransaksiTabunganDto), request);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id, HttpServletRequest request) {
-        return transactionServiceImpl.delete(id, null, request);
+        return transaksiServiceImpl.delete(id, null, request);
+    }
+    @GetMapping("/target/{targetId}")
+    public ResponseEntity<Object> findByTargetId(@PathVariable Long targetId,
+                                                 HttpServletRequest request) {
+        return transaksiServiceImpl.findByTargetId(targetId, request);
     }
 }

@@ -2,7 +2,7 @@ package com.starcodes.tabungin.dto.response;
 
 import java.time.LocalDateTime;
 
-public class RespTransactionDto{
+public class RespTransaksiTabunganDto {
 
     private Long id;
     private String jenisTransaksi;
@@ -12,6 +12,15 @@ public class RespTransactionDto{
     private String keterangan;
     private String username;
     private String targetName;
+    private LocalDateTime createdAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Long getId() {
         return id;
