@@ -3,9 +3,14 @@ package com.starcodes.tabungin.service;
 import com.starcodes.tabungin.core.interfaces.TransaksiTabunganService;
 import com.starcodes.tabungin.dto.response.RespTransaksiTabunganDto;
 import com.starcodes.tabungin.dto.validation.ValTransaksiTabunganDto;
+import com.starcodes.tabungin.dto.validation.ValWithDrawDto;
 import com.starcodes.tabungin.handler.ResponseHandler;
+import com.starcodes.tabungin.model.TargetTabungan;
 import com.starcodes.tabungin.model.TransaksiTabungan;
+import com.starcodes.tabungin.model.User;
+import com.starcodes.tabungin.repository.TargetRepository;
 import com.starcodes.tabungin.repository.TransaksiRepository;
+import com.starcodes.tabungin.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -16,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +30,12 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
 
     @Autowired
     private TransaksiRepository transaksiRepository;
+
+    @Autowired
+    private TargetRepository targetRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -97,27 +109,23 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
 
     @Override
     public ResponseEntity<Object> findByParam(Pageable pageable, String column, String value, HttpServletRequest request) {
-        return null; // Bisa diimplementasikan jika perlu search
+        return null;
     }
 
-    /** ===== Helper tambahan untuk DTO ===== */
-
-    // Map DTO → Entity
-
+    /** ===== Helper DTO ===== */
     public TransaksiTabungan mapToEntity(ValTransaksiTabunganDto valTransaksiTabunganDto){
         return modelMapper.map(valTransaksiTabunganDto, TransaksiTabungan.class);
     }
 
-    // Map List<Entity> → List<ResponseDTO>
     public List<RespTransaksiTabunganDto> mapToDto(List<TransaksiTabungan> transaksiList){
         return modelMapper.map(transaksiList, new TypeToken<List<RespTransaksiTabunganDto>>() {}.getType());
     }
 
-    // Overload save yang menerima ValTransactionDto
     public ResponseEntity<Object> save(ValTransaksiTabunganDto valTransaksiTabunganDto, HttpServletRequest request){
         TransaksiTabungan transaksi = mapToEntity(valTransaksiTabunganDto);
         return save(transaksi, request);
     }
+
     @Override
     public ResponseEntity<Object> findByTargetId(Long targetId, HttpServletRequest request) {
         try {
@@ -127,7 +135,7 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
                 return new ResponseHandler().handleResponse(
                         "Tidak ada transaksi untuk target ini",
                         HttpStatus.OK,
-                        List.of(), // kosong
+                        List.of(),
                         null,
                         request
                 );
@@ -153,9 +161,98 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
             );
         }
     }
+
     public List<RespTransaksiTabunganDto> getListByTargetId(Long targetId) {
         List<TransaksiTabungan> transaksiList = transaksiRepository.findByTargetTabunganId(targetId);
-        return mapToDto(transaksiList); // map langsung ke DTO
+        return mapToDto(transaksiList);
     }
 
+    /** ===== Deposit ===== */
+    public ResponseEntity<Object> deposit(ValTransaksiTabunganDto val, HttpServletRequest request) {
+        try {
+            TargetTabungan target = targetRepository.findById(val.getTargetTabunganId())
+                    .orElseThrow(() -> new RuntimeException("Target tidak ditemukan"));
+
+            User user = userRepository.findById(val.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
+
+            TransaksiTabungan transaksi = new TransaksiTabungan();
+            transaksi.setTargetTabungan(target);
+            transaksi.setUser(user);
+            transaksi.setJenisTransaksi("DEPOSIT");
+            transaksi.setJumlahTransaksi(val.getJumlahTransaksi());
+            transaksi.setKeterangan(val.getKeterangan());
+            transaksi.setCreatedAt(LocalDateTime.now());
+            transaksi.setUpdatedAt(LocalDateTime.now());
+            transaksi.setStatusTransaksi("SUKSES");
+
+            transaksiRepository.save(transaksi);
+
+            double danaTerkumpul = target.getDanaTerkumpul() != null ? target.getDanaTerkumpul() : 0;
+            target.setDanaTerkumpul(danaTerkumpul + val.getJumlahTransaksi());
+
+            targetRepository.save(target);
+
+            return new ResponseHandler().handleResponse("Deposit berhasil", HttpStatus.CREATED, transaksi, null, request);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseHandler().handleResponse("Gagal melakukan deposit", HttpStatus.INTERNAL_SERVER_ERROR, null, "DEP01", request);
+        }
+    }
+
+    /** ===== Withdraw ===== */
+    public ResponseEntity<Object> withdraw(ValWithDrawDto val, HttpServletRequest request) {
+        try {
+            TargetTabungan target = targetRepository.findById(val.getTargetTabunganId())
+                    .orElseThrow(() -> new RuntimeException("Target tidak ditemukan"));
+
+            User user = userRepository.findById(val.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
+
+            double danaTerkumpul = target.getDanaTerkumpul() != null ? target.getDanaTerkumpul() : 0;
+            if (val.getJumlahTransaksi() > danaTerkumpul) {
+                return new ResponseHandler().handleResponse(
+                        "Saldo tidak cukup",
+                        HttpStatus.BAD_REQUEST,
+                        null,
+                        "TRW01",
+                        request
+                );
+            }
+
+            TransaksiTabungan transaksi = new TransaksiTabungan();
+            transaksi.setTargetTabungan(target);
+            transaksi.setUser(user);
+            transaksi.setJenisTransaksi("WITHDRAW");
+            transaksi.setJumlahTransaksi(val.getJumlahTransaksi());
+            transaksi.setKeterangan(val.getKeterangan());
+            transaksi.setCreatedAt(LocalDateTime.now());
+            transaksi.setUpdatedAt(LocalDateTime.now());
+            transaksi.setStatusTransaksi("SUKSES");
+
+            transaksiRepository.save(transaksi);
+
+            target.setDanaTerkumpul(danaTerkumpul - val.getJumlahTransaksi());
+            targetRepository.save(target);
+
+            return new ResponseHandler().handleResponse(
+                    "Dana berhasil ditarik",
+                    HttpStatus.CREATED,
+                    transaksi,
+                    null,
+                    request
+            );
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseHandler().handleResponse(
+                    "Gagal melakukan penarikan dana",
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    null,
+                    "TRW02",
+                    request
+            );
+        }
+    }
 }

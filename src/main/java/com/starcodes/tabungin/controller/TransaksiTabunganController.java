@@ -1,6 +1,7 @@
 package com.starcodes.tabungin.controller;
 
 import com.starcodes.tabungin.dto.validation.ValTransaksiTabunganDto;
+import com.starcodes.tabungin.dto.validation.ValWithDrawDto;
 import com.starcodes.tabungin.service.TransaksiServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,10 @@ public class TransaksiTabunganController {
     public ResponseEntity<Object> findByTargetId(@PathVariable Long targetId,
                                                  HttpServletRequest request) {
         return transaksiServiceImpl.findByTargetId(targetId, request);
+    }
+    @PostMapping("/withdraw")
+    public ResponseEntity<Object> withdrawDana(@RequestBody ValWithDrawDto val,
+                                               HttpServletRequest request) {
+        return transaksiServiceImpl.withdraw(val, request);
     }
 }

@@ -14,8 +14,8 @@ public class DetailTatgetController {
         @Autowired
         private TargetService targetService;
 
-        @GetMapping("/detail/{id}")
-        public ResponseEntity<Object> getDetailTarget(@PathVariable Long id, HttpServletRequest request) {
-            return targetService.findDetailTarget(id, request);
+        @GetMapping("/{targetId}")
+        public ResponseEntity<Object> getDetailTarget(@PathVariable Long targetId, HttpServletRequest request) {
+            return targetService.findDetailTarget(targetId, request);
         }
 }
