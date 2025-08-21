@@ -3,8 +3,8 @@ package com.starcodes.tabungin.dto.validation;
 import java.time.LocalDate;
 
 public class ValTargetTabunganDto {
-    private Long id;
 
+    private Long id;
     private String targetName;
     private Double hargaTarget;
     private Double danaTerkumpul;

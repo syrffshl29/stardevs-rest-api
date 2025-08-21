@@ -147,8 +147,18 @@ public class TargetServiceImpl implements TargetService<TargetTabungan> {
 
                     // Hitung dana terkumpul
                     Double danaTerkumpul = transaksiDtoList.stream()
-                            .mapToDouble(RespTransaksiTabunganDto::getJumlahTransaksi)
+                            .mapToDouble(trx -> {
+                                if ("Withdraw".equalsIgnoreCase(trx.getJenisTransaksi())) {
+                                    return -trx.getJumlahTransaksi(); // withdraw dikurangkan
+                                } else {
+                                    return trx.getJumlahTransaksi();  // deposit ditambahkan
+                                }
+                            })
                             .sum();
+
+                    // Update ke entity (supaya tersimpan di DB)
+                    target.setDanaTerkumpul(danaTerkumpul);
+                    targetRepository.save(target);
 
                     // Hitung progress
                     double progress = 0;

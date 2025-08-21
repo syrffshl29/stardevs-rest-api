@@ -99,7 +99,9 @@ public class RespDetailTargetDto {
     }
 
     public Double getProgress() {
-        return progress;
+        return this.danaTerkumpul != null && this.hargaTarget != null
+                ? (this.danaTerkumpul / this.hargaTarget) * 100
+                : 0;
     }
 
     public void setProgress(Double progress) {

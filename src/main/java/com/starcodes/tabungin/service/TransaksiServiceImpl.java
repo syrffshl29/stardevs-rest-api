@@ -161,7 +161,6 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
             );
         }
     }
-
     public List<RespTransaksiTabunganDto> getListByTargetId(Long targetId) {
         List<TransaksiTabungan> transaksiList = transaksiRepository.findByTargetTabunganId(targetId);
         return mapToDto(transaksiList);
@@ -179,7 +178,7 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
             TransaksiTabungan transaksi = new TransaksiTabungan();
             transaksi.setTargetTabungan(target);
             transaksi.setUser(user);
-            transaksi.setJenisTransaksi("DEPOSIT");
+            transaksi.setJenisTransaksi("Deposit");
             transaksi.setJumlahTransaksi(val.getJumlahTransaksi());
             transaksi.setKeterangan(val.getKeterangan());
             transaksi.setCreatedAt(LocalDateTime.now());
@@ -224,8 +223,9 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
             TransaksiTabungan transaksi = new TransaksiTabungan();
             transaksi.setTargetTabungan(target);
             transaksi.setUser(user);
-            transaksi.setJenisTransaksi("WITHDRAW");
+            transaksi.setJenisTransaksi("Withdraw");
             transaksi.setJumlahTransaksi(val.getJumlahTransaksi());
+            target.setHargaTarget(target.getHargaTarget());
             transaksi.setKeterangan(val.getKeterangan());
             transaksi.setCreatedAt(LocalDateTime.now());
             transaksi.setUpdatedAt(LocalDateTime.now());

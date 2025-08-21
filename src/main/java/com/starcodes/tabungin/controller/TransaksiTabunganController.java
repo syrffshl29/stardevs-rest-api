@@ -45,8 +45,13 @@ public class TransaksiTabunganController {
         return transaksiServiceImpl.findByTargetId(targetId, request);
     }
     @PostMapping("/withdraw")
-    public ResponseEntity<Object> withdrawDana(@RequestBody ValWithDrawDto val,
+    public ResponseEntity<Object> withdraw(@RequestBody ValWithDrawDto val,
                                                HttpServletRequest request) {
         return transaksiServiceImpl.withdraw(val, request);
+    }
+    @PostMapping("/deposit")
+    public ResponseEntity<Object> deposit(@RequestBody ValTransaksiTabunganDto val,
+                                           HttpServletRequest request) {
+        return transaksiServiceImpl.deposit(val, request);
     }
 }

@@ -24,7 +24,7 @@ public class TargetController {
     public Object findAll(HttpServletRequest request, Pageable pageable){
         return targetServiceImpl.findAll(pageable,request);
     }
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id,
                                          @RequestBody ValTargetTabunganDto valTargetTabunganDto,
                                          HttpServletRequest request) {
@@ -35,7 +35,7 @@ public class TargetController {
     public ResponseEntity<Object> getUserById(@PathVariable Long id, HttpServletRequest request) {
         return targetServiceImpl.findById(id, null, request);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id, HttpServletRequest request) {
         return targetServiceImpl.delete(id, null, request);
     }
