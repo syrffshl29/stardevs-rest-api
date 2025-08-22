@@ -1,4 +1,4 @@
-/*
+
 Navicat SQL Server Data Transfer
 
 Source Server         : Local_SQLServer
@@ -12,7 +12,7 @@ Target Server Version : 160000
 File Encoding         : 65001
 
 Date: 2025-08-13 05:49:29
-*/
+
 
 
 -- ----------------------------
@@ -67,32 +67,6 @@ CREATE TABLE [project].[detailtarget] (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for [project].[GroupMenu]
--- ----------------------------
-DROP TABLE [project].[GroupMenu]
-;
-CREATE TABLE [project].[GroupMenu] (
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Nama] varchar(50) NOT NULL ,
-[Deskripsi] varchar(255) NOT NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of GroupMenu
--- ----------------------------
-SET IDENTITY_INSERT [project].[GroupMenu] ON
-;
-SET IDENTITY_INSERT [project].[GroupMenu] OFF
-;
-
--- ----------------------------
 -- Table structure for [project].[log_aktifitas]
 -- ----------------------------
 DROP TABLE [project].[log_aktifitas]
@@ -107,7 +81,6 @@ CREATE TABLE [project].[log_aktifitas] (
 [jenis_aktivitas] varchar(255) NULL ,
 [user_agent] varchar(255) NULL 
 )
-
 
 ;
 
@@ -137,196 +110,6 @@ CREATE TABLE [project].[logaktivitas] (
 
 
 ;
-
--- ----------------------------
--- Records of logaktivitas
--- ----------------------------
-
--- ----------------------------
--- Table structure for [project].[MapAksesMenu]
--- ----------------------------
-DROP TABLE [project].[MapAksesMenu]
-;
-CREATE TABLE [project].[MapAksesMenu] (
-[IDAkses] bigint NOT NULL ,
-[IDMenu] bigint NOT NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of MapAksesMenu
--- ----------------------------
-
--- ----------------------------
--- Table structure for [project].[Menu]
--- ----------------------------
-DROP TABLE [project].[Menu]
-;
-CREATE TABLE [project].[Menu] (
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[IDGroupMenu] bigint NULL ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Nama] varchar(50) NOT NULL ,
-[Path] varchar(50) NOT NULL ,
-[Deskripsi] varchar(255) NOT NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of Menu
--- ----------------------------
-SET IDENTITY_INSERT [project].[Menu] ON
-;
-SET IDENTITY_INSERT [project].[Menu] OFF
-;
-
--- ----------------------------
--- Table structure for [project].[MstAkses]
--- ----------------------------
-DROP TABLE [project].[MstAkses]
-;
-CREATE TABLE [project].[MstAkses] (
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Nama] varchar(50) NOT NULL ,
-[Deskripsi] varchar(255) NOT NULL 
-)
-
-
-;
-DBCC CHECKIDENT(N'[project].[MstAkses]', RESEED, 2)
-;
-
--- ----------------------------
--- Records of MstAkses
--- ----------------------------
-SET IDENTITY_INSERT [project].[MstAkses] ON
-;
-INSERT INTO [project].[MstAkses] ([CreatedBy], [CreatedDate], [ID], [ModifiedBy], [ModifiedDate], [Nama], [Deskripsi]) VALUES (N'1', N'2025-08-13 05:39:13.489218', N'1', null, null, N'ADMIN', N'Role Administrator dengan akses penuh');
-;
-INSERT INTO [project].[MstAkses] ([CreatedBy], [CreatedDate], [ID], [ModifiedBy], [ModifiedDate], [Nama], [Deskripsi]) VALUES (N'1', N'2025-08-13 05:39:14.738216', N'2', null, null, N'USER', N'Role User biasa dengan akses terbatas');
-;
-SET IDENTITY_INSERT [project].[MstAkses] OFF
-;
-
--- ----------------------------
--- Table structure for [project].[MstGroupMenu]
--- ----------------------------
-DROP TABLE [project].[MstGroupMenu]
-;
-CREATE TABLE [project].[MstGroupMenu] (
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Nama] varchar(50) NOT NULL ,
-[Deskripsi] varchar(255) NOT NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of MstGroupMenu
--- ----------------------------
-SET IDENTITY_INSERT [project].[MstGroupMenu] ON
-;
-SET IDENTITY_INSERT [project].[MstGroupMenu] OFF
-;
-
--- ----------------------------
--- Table structure for [project].[MstMenu]
--- ----------------------------
-DROP TABLE [project].[MstMenu]
-;
-CREATE TABLE [project].[MstMenu] (
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[IDGroupMenu] bigint NULL ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Nama] varchar(50) NOT NULL ,
-[Path] varchar(50) NOT NULL ,
-[Deskripsi] varchar(255) NOT NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of MstMenu
--- ----------------------------
-SET IDENTITY_INSERT [project].[MstMenu] ON
-;
-SET IDENTITY_INSERT [project].[MstMenu] OFF
-;
-
--- ----------------------------
--- Table structure for [project].[MstUser]
--- ----------------------------
-DROP TABLE [project].[MstUser]
-;
-CREATE TABLE [project].[MstUser] (
-[IsRegistered] bit NULL ,
-[TanggalLahir] date NOT NULL ,
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[IDAkses] bigint NULL ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Username] varchar(16) NOT NULL ,
-[NoHp] varchar(18) NOT NULL ,
-[OTP] varchar(64) NULL ,
-[Password] varchar(64) NOT NULL ,
-[TokenEstafet] varchar(64) NULL ,
-[NamaLengkap] varchar(70) NOT NULL ,
-[Email] varchar(256) NOT NULL ,
-[LinkImage] varchar(256) NULL ,
-[PathImage] varchar(256) NULL ,
-[Alamat] varchar(255) NOT NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of MstUser
--- ----------------------------
-SET IDENTITY_INSERT [project].[MstUser] ON
-;
-SET IDENTITY_INSERT [project].[MstUser] OFF
-;
-
--- ----------------------------
--- Table structure for [project].[Role]
--- ----------------------------
-DROP TABLE [project].[Role]
-;
-CREATE TABLE [project].[Role] (
-[CreatedBy] bigint NOT NULL ,
-[CreatedDate] datetime2(6) NULL ,
-[ID] bigint NOT NULL IDENTITY(1,1) ,
-[ModifiedBy] bigint NULL ,
-[ModifiedDate] datetime2(6) NULL ,
-[Nama] varchar(50) NOT NULL ,
-[Deskripsi] varchar(255) NOT NULL 
-)
-
-
-;
 DBCC CHECKIDENT(N'[project].[Role]', RESEED, 2)
 ;
 
@@ -343,56 +126,11 @@ SET IDENTITY_INSERT [project].[Role] OFF
 ;
 
 -- ----------------------------
--- Table structure for [project].[roles]
--- ----------------------------
-DROP TABLE [project].[roles]
-;
-CREATE TABLE [project].[roles] (
-[id] bigint NOT NULL IDENTITY(1,1) ,
-[name] varchar(255) NULL 
-)
-
-
-;
-
--- ----------------------------
 -- Records of roles
 -- ----------------------------
 SET IDENTITY_INSERT [project].[roles] ON
 ;
 SET IDENTITY_INSERT [project].[roles] OFF
-;
-
--- ----------------------------
--- Table structure for [project].[setoran]
--- ----------------------------
-DROP TABLE [project].[setoran]
-;
-CREATE TABLE [project].[setoran] (
-[jumlah_setoran] float(53) NULL ,
-[created_at] datetime2(6) NULL ,
-[setoran_id] bigint NOT NULL IDENTITY(1,1) ,
-[tanggal_setoran] datetime2(6) NULL ,
-[targetId] bigint NULL ,
-[target_id] bigint NOT NULL ,
-[transaksi_id] bigint NOT NULL ,
-[updated_at] datetime2(6) NULL ,
-[user_id] bigint NOT NULL ,
-[bukti_setoran] varchar(255) NULL ,
-[catatan_setoran] varchar(255) NULL ,
-[status_verifikasi] varchar(255) NULL ,
-[sumber_dana] varchar(255) NULL 
-)
-
-
-;
-
--- ----------------------------
--- Records of setoran
--- ----------------------------
-SET IDENTITY_INSERT [project].[setoran] ON
-;
-SET IDENTITY_INSERT [project].[setoran] OFF
 ;
 
 -- ----------------------------
@@ -520,24 +258,6 @@ ALTER TABLE [project].[detailtarget] ADD PRIMARY KEY ([detail_id])
 ;
 
 -- ----------------------------
--- Indexes structure for table GroupMenu
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table [project].[GroupMenu]
--- ----------------------------
-ALTER TABLE [project].[GroupMenu] ADD PRIMARY KEY ([ID])
-;
-
--- ----------------------------
--- Uniques structure for table [project].[GroupMenu]
--- ----------------------------
-ALTER TABLE [project].[GroupMenu] ADD UNIQUE ([Nama] ASC)
-;
-ALTER TABLE [project].[GroupMenu] ADD UNIQUE ([Deskripsi] ASC)
-;
-
--- ----------------------------
 -- Indexes structure for table log_aktifitas
 -- ----------------------------
 
@@ -555,112 +275,6 @@ ALTER TABLE [project].[log_aktifitas] ADD PRIMARY KEY ([id])
 -- Primary Key structure for table [project].[logaktivitas]
 -- ----------------------------
 ALTER TABLE [project].[logaktivitas] ADD PRIMARY KEY ([log_id])
-;
-
--- ----------------------------
--- Indexes structure for table MapAksesMenu
--- ----------------------------
-
--- ----------------------------
--- Uniques structure for table [project].[MapAksesMenu]
--- ----------------------------
-ALTER TABLE [project].[MapAksesMenu] ADD UNIQUE ([IDAkses] ASC, [IDMenu] ASC)
-;
-
--- ----------------------------
--- Indexes structure for table Menu
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table [project].[Menu]
--- ----------------------------
-ALTER TABLE [project].[Menu] ADD PRIMARY KEY ([ID])
-;
-
--- ----------------------------
--- Uniques structure for table [project].[Menu]
--- ----------------------------
-ALTER TABLE [project].[Menu] ADD UNIQUE ([Path] ASC)
-;
-ALTER TABLE [project].[Menu] ADD UNIQUE ([Nama] ASC)
-;
-ALTER TABLE [project].[Menu] ADD UNIQUE ([Deskripsi] ASC)
-;
-
--- ----------------------------
--- Indexes structure for table MstAkses
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table [project].[MstAkses]
--- ----------------------------
-ALTER TABLE [project].[MstAkses] ADD PRIMARY KEY ([ID])
-;
-
--- ----------------------------
--- Uniques structure for table [project].[MstAkses]
--- ----------------------------
-ALTER TABLE [project].[MstAkses] ADD UNIQUE ([Nama] ASC)
-;
-ALTER TABLE [project].[MstAkses] ADD UNIQUE ([Deskripsi] ASC)
-;
-
--- ----------------------------
--- Indexes structure for table MstGroupMenu
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table [project].[MstGroupMenu]
--- ----------------------------
-ALTER TABLE [project].[MstGroupMenu] ADD PRIMARY KEY ([ID])
-;
-
--- ----------------------------
--- Uniques structure for table [project].[MstGroupMenu]
--- ----------------------------
-ALTER TABLE [project].[MstGroupMenu] ADD UNIQUE ([Nama] ASC)
-;
-ALTER TABLE [project].[MstGroupMenu] ADD UNIQUE ([Deskripsi] ASC)
-;
-
--- ----------------------------
--- Indexes structure for table MstMenu
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table [project].[MstMenu]
--- ----------------------------
-ALTER TABLE [project].[MstMenu] ADD PRIMARY KEY ([ID])
-;
-
--- ----------------------------
--- Uniques structure for table [project].[MstMenu]
--- ----------------------------
-ALTER TABLE [project].[MstMenu] ADD UNIQUE ([Path] ASC)
-;
-ALTER TABLE [project].[MstMenu] ADD UNIQUE ([Deskripsi] ASC)
-;
-ALTER TABLE [project].[MstMenu] ADD UNIQUE ([Nama] ASC)
-;
-
--- ----------------------------
--- Indexes structure for table MstUser
--- ----------------------------
-
--- ----------------------------
--- Primary Key structure for table [project].[MstUser]
--- ----------------------------
-ALTER TABLE [project].[MstUser] ADD PRIMARY KEY ([ID])
-;
-
--- ----------------------------
--- Uniques structure for table [project].[MstUser]
--- ----------------------------
-ALTER TABLE [project].[MstUser] ADD UNIQUE ([NoHp] ASC)
-;
-ALTER TABLE [project].[MstUser] ADD UNIQUE ([Email] ASC)
-;
-ALTER TABLE [project].[MstUser] ADD UNIQUE ([Username] ASC)
 ;
 
 -- ----------------------------
@@ -739,20 +353,6 @@ ALTER TABLE [project].[users] ADD UNIQUE ([Email] ASC)
 ALTER TABLE [project].[users] ADD UNIQUE ([NoHp] ASC)
 ;
 ALTER TABLE [project].[users] ADD UNIQUE ([Username] ASC)
-;
-
--- ----------------------------
--- Foreign Key structure for table [project].[MapAksesMenu]
--- ----------------------------
-ALTER TABLE [project].[MapAksesMenu] ADD FOREIGN KEY ([IDAkses]) REFERENCES [project].[MstAkses] ([ID]) ON DELETE NO ACTION ON UPDATE NO ACTION
-;
-ALTER TABLE [project].[MapAksesMenu] ADD FOREIGN KEY ([IDMenu]) REFERENCES [project].[MstMenu] ([ID]) ON DELETE NO ACTION ON UPDATE NO ACTION
-;
-
--- ----------------------------
--- Foreign Key structure for table [project].[MstMenu]
--- ----------------------------
-ALTER TABLE [project].[MstMenu] ADD FOREIGN KEY ([IDGroupMenu]) REFERENCES [project].[MstGroupMenu] ([ID]) ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
 -- ----------------------------
