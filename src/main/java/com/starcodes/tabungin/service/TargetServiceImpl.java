@@ -115,11 +115,18 @@ public class TargetServiceImpl implements TargetService<TargetTabungan> {
     public ResponseEntity<Object> findAll(Pageable pageable, HttpServletRequest request) {
         try {
             List<TargetTabungan> targetList = targetRepository.findAll(pageable).getContent();
-            List<RespTargetTabunganDto> respList = modelMapper.map(targetList, new TypeToken<List<RespTargetTabunganDto>>(){}.getType());
-            return new ResponseHandler().handleResponse("Data Ditemukan", HttpStatus.OK, respList, null, request);
+            List<RespTargetTabunganDto> respList = modelMapper.map(
+                    targetList,
+                    new TypeToken<List<RespTargetTabunganDto>>(){}.getType()
+            );
+            return new ResponseHandler().handleResponse(
+                    "Data Ditemukan", HttpStatus.OK, respList, null, request
+            );
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseHandler().handleResponse("Gagal Mengambil Data", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FA", request);
+            return new ResponseHandler().handleResponse(
+                    "Gagal Mengambil Data", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FA", request
+            );
         }
     }
 
