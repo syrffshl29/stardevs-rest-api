@@ -10,7 +10,9 @@ public class RespTransaksiTabunganDto {
     private String metodePembayaran;
     private String statusTransaksi;
     private String keterangan;
+    private Long userId;
     private String username;
+    private Long targetTabunganId;
     private String targetName;
     private LocalDateTime createdAt;
 
@@ -84,5 +86,21 @@ public class RespTransaksiTabunganDto {
 
     public void setTargetName(String targetName) {
         this.targetName = targetName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getTargetTabunganId() {
+        return targetTabunganId;
+    }
+
+    public void setTargetTabunganId(Long targetTabunganId) {
+        this.targetTabunganId = targetTabunganId;
     }
 }

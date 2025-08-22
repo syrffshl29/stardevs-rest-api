@@ -47,34 +47,52 @@ public class TargetServiceImpl implements TargetService<TargetTabungan> {
 
     @Override
     public ResponseEntity<Object> save(TargetTabungan targetTabungan, HttpServletRequest request) {
-        if(targetTabungan==null){
-            return new ResponseHandler().handleResponse("Object Null", HttpStatus.BAD_REQUEST,null,"TRN01FV",request);
+        if (targetTabungan == null) {
+            return new ResponseHandler()
+                    .handleResponse("Object Null", HttpStatus.BAD_REQUEST, null, "TRN01FV", request);
         }
+
         try {
             // Ambil JWT dari header
-            String jwt = request.getHeader("Authorization");
-            if(jwt != null && jwt.startsWith("Bearer ")) {
-                jwt = jwt.substring(7);
-                String username = jwtUtility.getUsernameFromToken(jwt);
-                User user = userRepository.findByUsername(username)
-                        .orElseThrow(() -> new RuntimeException("User Tidak Ditemukan"));
-                targetTabungan.setUser(user);
-            } else {
-                return new ResponseHandler().handleResponse("JWT Tidak Ditemukan", HttpStatus.UNAUTHORIZED, null, "TRN01FJ", request);
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return new ResponseHandler()
+                        .handleResponse("JWT Tidak Ditemukan", HttpStatus.UNAUTHORIZED, null, "TRN01FJ", request);
             }
 
-            // Set field default
-            targetTabungan.setCreatedAt(LocalDateTime.now());
-            targetTabungan.setUpdatedAt(LocalDateTime.now());
-            if(targetTabungan.getDanaTerkumpul() == null) targetTabungan.setDanaTerkumpul(0.0);
-            if(targetTabungan.getStatusTarget() == null) targetTabungan.setStatusTarget("ACTIVE");
+            String jwt = authHeader.substring(7).trim(); // ambil token
+            String username = jwtUtility.getUsernameFromToken(jwt);
 
+            // Ambil user dari database
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User Tidak Ditemukan"));
+
+            // Set user ke target tabungan
+            targetTabungan.setUser(user);
+
+            // Set field default jika null
+            LocalDateTime now = LocalDateTime.now();
+            targetTabungan.setCreatedAt(now);
+            targetTabungan.setUpdatedAt(now);
+
+            if (targetTabungan.getDanaTerkumpul() == null) {
+                targetTabungan.setDanaTerkumpul(0.0);
+            }
+            if (targetTabungan.getStatusTarget() == null) {
+                targetTabungan.setStatusTarget("ACTIVE");
+            }
+
+            // Simpan target tabungan
             targetRepository.save(targetTabungan);
-        }catch (Exception e){
+
+            return new ResponseHandler()
+                    .handleResponse("Data Berhasil Disimpan", HttpStatus.CREATED, null, null, request);
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseHandler().handleResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR,null,"TRN01FE01",request);
+            return new ResponseHandler()
+                    .handleResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FE01", request);
         }
-        return new ResponseHandler().handleResponse("Data Berhasil Disimpan", HttpStatus.CREATED,null,null,request);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.starcodes.tabungin.model.User;
 import com.starcodes.tabungin.repository.TargetRepository;
 import com.starcodes.tabungin.repository.TransaksiRepository;
 import com.starcodes.tabungin.repository.UserRepository;
+import com.starcodes.tabungin.security.JwtUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -35,6 +36,9 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
     private TargetRepository targetRepository;
 
     @Autowired
+    private JwtUtility jwtUtility;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -43,16 +47,53 @@ public class TransaksiServiceImpl implements TransaksiTabunganService<TransaksiT
     /** ===== Implementasi interface ===== */
     @Override
     public ResponseEntity<Object> save(TransaksiTabungan transaksi, HttpServletRequest request) {
-        if(transaksi == null){
-            return new ResponseHandler().handleResponse("Object Null", HttpStatus.BAD_REQUEST, null, "TRN01FV", request);
+        if (transaksi == null) {
+            return new ResponseHandler()
+                    .handleResponse("Object Null", HttpStatus.BAD_REQUEST, null, "TRN01FV", request);
         }
-        try{
+
+        try {
+            // Ambil JWT dari header
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return new ResponseHandler()
+                        .handleResponse("JWT Tidak Ditemukan", HttpStatus.UNAUTHORIZED, null, "TRN01FJ", request);
+            }
+
+            String jwt = authHeader.substring(7).trim(); // ambil token
+            String username = jwtUtility.getUsernameFromToken(jwt);
+
+            // Ambil user dari database
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User Tidak Ditemukan"));
+
+            // Set user ke transaksi
+            transaksi.setUser(user);
+
+            // Set field default
+            LocalDateTime now = LocalDateTime.now();
+            transaksi.setCreatedAt(now);
+            transaksi.setUpdatedAt(now);
+
+            if (transaksi.getJumlahTransaksi() == null) {
+                transaksi.setJumlahTransaksi(0.0); // default jumlah jika null
+            }
+
+            if (transaksi.getKeterangan() == null) {
+                transaksi.setKeterangan("-"); // default keterangan jika null
+            }
+
+            // Simpan transaksi
             transaksiRepository.save(transaksi);
-        }catch(Exception e){
+
+            return new ResponseHandler()
+                    .handleResponse("Data Berhasil Disimpan", HttpStatus.CREATED, null, null, request);
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseHandler().handleResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FE01", request);
+            return new ResponseHandler()
+                    .handleResponse("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR, null, "TRN01FE01", request);
         }
-        return new ResponseHandler().handleResponse("Data Berhasil Disimpan", HttpStatus.CREATED, null, null, request);
     }
 
     @Override
